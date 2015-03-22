@@ -19,4 +19,4 @@ configure_file (
 # Add the binary tree to the search path for the config file include
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_executable(lang main.cpp lex.cpp token.cpp)
+add_subdirectory("${PROJECT_SOURCE_DIR}/src/")
