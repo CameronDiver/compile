@@ -1,0 +1,2 @@
+#define Lang_VERSION_MAJOR @Lang_VERSION_MAJOR@
+#define Lang_VERSION_MINOR @Lang_VERSION_MINOR@
