@@ -90,6 +90,11 @@ void lex(vector<Token> &tokens) {
 				}
 				break;
 
+				case ',':
+					addIfNotEmpty(tokens, ss.str(), lineno);
+					ss.str("");
+				break;
+
 				default:
 					ss << c;
 				break;
