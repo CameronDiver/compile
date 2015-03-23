@@ -5,6 +5,7 @@
 
 #include "langconf.h"
 #include "lex.h"
+#include "astbuilder.h"
 using namespace std;
 
 FILE *src;
@@ -34,10 +35,12 @@ int main(int argc, char *argv[]){
 	vector<Token> tokens;
 	lex(tokens);
 
-	for(int x = 0; x < tokens.size(); ++x) {
-		printf("Token: %s\n", tokens[x].getCData());
-	}
+	// for(int x = 0; x < tokens.size(); ++x) {
+	// 	printf("Token: %s\n", tokens[x].getCData());
+	// } 
 
+	// Create an ASTBuilder
+	ASTBuilder builder(tokens);
 
 
     return 0;
