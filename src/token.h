@@ -10,7 +10,7 @@ public:
 	Token(string data, int line, string context);
 	Token(string data);
 
-	string getData();
+	const string getData();
 	const char *getCData();
 
 	unsigned int getLine();

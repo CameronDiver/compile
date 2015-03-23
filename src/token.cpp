@@ -12,7 +12,7 @@ Token::Token(string data) {
 	context = "Unknown context";
 }
 
-string Token::getData() {
+const string Token::getData() {
 	return data;
 }
 const char *Token::getCData() {
