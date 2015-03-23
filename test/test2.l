@@ -1,0 +1,2 @@
+int i
+string b

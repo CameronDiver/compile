@@ -13,6 +13,11 @@ end
 
 string name = "cameron"
 
-showString | str |
+void showString | str |
 	print str
 end
+
+void noargs | |
+	dosomething()
+end
+
