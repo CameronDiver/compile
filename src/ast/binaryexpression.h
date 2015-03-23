@@ -1,4 +1,4 @@
-##ifndef AST_BINARY_EXPRESSION_H
+#ifndef AST_BINARY_EXPRESSION_H
 #define AST_BINARY_EXPRESSION_H
 
 #include "expression.h"

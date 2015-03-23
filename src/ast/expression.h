@@ -5,7 +5,7 @@
 // syntax tree
 class Expression {
 public:
-	virtual ~Expression();
+	virtual ~Expression(){};
 
 };
 
