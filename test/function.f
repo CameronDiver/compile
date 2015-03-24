@@ -1,5 +1,5 @@
-int fn | int a, string b |
-	int c = a
+int fn | int a, int b |
+	int c = a+b
 
 	callthis()
 	print(a)

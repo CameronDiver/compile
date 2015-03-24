@@ -7,4 +7,4 @@ set (CMAKE_CXX_FLAGS 		"-Wall -std=c++11 -DDEBUG -g")
 project (compile CXX)
 
 
-add_executable(compile main.cpp)
+add_executable(compile main.cpp token.cpp builtins.cpp)
