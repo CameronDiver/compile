@@ -13,6 +13,10 @@ class CallExpression : public Expression {
 public:
 	CallExpression(const std::string &_callee, std::vector<Expression *> &_args)
 		: callee(_callee), args(_args) {}
+
+	std::string getStrRep() {
+		return callee;
+	}
 };
 
 

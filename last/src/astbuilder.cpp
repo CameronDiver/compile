@@ -15,21 +15,34 @@ void ASTBuilder::parse() {
 	// either variable declaration/assignment or function definition
 	Token *t;
 
-	while((t = getCurrentToken())) {
+	while((t = getCurrentToken()) != NULL) {
 		// TODO: check that the first token is a type name, otherwise syntax error,
 		// or the parsing is broken somehow
 
-		parseTopLevelStatement();
+		Expression *primary = parseTopLevelStatement();
+		if(primary == NULL) {
+			std::cout << "Error: astbuilder.cpp:24" << std::endl;
+		} else {
+			tree.push_back(primary);
+		}
 
+		if(peekNextToken() == NULL) break;
+	}
+
+	for(int a = 0; a < tree.size(); ++a) {
+		Expression *e = tree[a];
+		std::cout << "String representation: " <<  e->getStrRep() << std::endl;
 	}
 }
 
 Expression *ASTBuilder::parseTopLevelStatement() {
 	// get the type 
 	Token *type = getNextToken();
-	Token *symbolName = getNextToken();
+	if(type == NULL) return NULL;
 
-	cout << symbolName->getData() << endl;
+	Token *symbolName = getCurrentToken();
+	if(symbolName == NULL) return NULL;
+
 	if(!isSymbol(symbolName->getData())) {
 		cout << "Error: astbuilder.cpp:33" << endl;
 	}
@@ -39,15 +52,27 @@ Expression *ASTBuilder::parseTopLevelStatement() {
 	// an argument list => function definition,
 	// another typename => variable definition w/out assigment
 	Token *next = peekNextToken();
-	if(!next->getData().compare("=")) {
-		getNextToken(); //eat the =
+
+	// there's not another token
+	if(next == NULL) {
+		
+		return new VarExpression(symbolName->getData());
+	}else if(!next->getData().compare("=")) {
+		
+
+		getNextToken(); // eat the name
+		Token *t = getNextToken(); // and the '='
+
 		return new BinaryExpression('=', new VarExpression(symbolName->getData()), parseExpression());
+
 	} else if(!next->getData().compare("|")) {
-		cout << "TODO: function definiton" << endl;
-	} else {
+		
+		return parseFunctionDefinition();
+		
+	} else if(isBuiltinTypeName(next->getData())) {
+		getNextToken();
 		return new VarExpression(symbolName->getData());
 	}
-
 
 	return NULL;
 }
@@ -116,9 +141,67 @@ Expression *ASTBuilder::parseExpression() {
 
 	if(isSymbol(data)) return parseIdentifierExpression();
 	if(isInteger(data)) return parseIntegerExpression();
-	if(data[0] == ')') return parseParensExpression();
+	if(!data.compare("(")) return parseParensExpression();
+
+	return NULL;
 }
 
-unsigned int ASTBuilder::getTokenType(const Token &t) {
+Expression *ASTBuilder::parseFunctionDefinition() {
+	// gather the name, the arguments and the body
+	std::string fnName = getNextToken()->getData();
 
+	// TODO: sanity checking 
+
+	Token *t = getNextToken();
+	cout << t->getData() << endl;
+	if(t->getData().compare("|") != 0) {
+		cout << "Error: astbuilder.cpp:157" << endl;
+	}
+	t = getNextToken();
+	vector<std::string> args;
+
+	// simple error checking
+	int commas = 0;
+	while(t != NULL && t->getData().compare("|") != 0) {
+		std::string data = t->getData();
+		if(t->getData().compare(",") == 0){
+			++commas;
+		} else {
+			// ensure that it can be a variable name
+			if(!isSymbol(data)){
+				cout << "Error: astbuilder.cpp:171" << endl;
+			}
+			args.push_back(data);
+		}
+
+		t = getNextToken();
+	}
+
+	if(args.size() != (commas + 1)) {
+		cout << "Error: astbuilder.cpp:180" << endl;
+	}
+
+	// create a prototype 
+	PrototypeExpression *proto = new PrototypeExpression(fnName, args);
+
+
+	// now need to get all of the body functions
+	// can have function calls and assigments
+	
+	// the current token is the closing | around the arguments
+	t = getNextToken();
+	bool endFound = false;
+	while(t != NULL) {
+		std::string data = t->getData();
+
+		if(data.compare("end") == 0){
+			// end of the function definition
+			endFound = true;
+			break;
+		}
+
+		t = getNextToken();
+	}
+	
+	return proto;
 }

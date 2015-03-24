@@ -3,6 +3,9 @@
 
 #include "expression.h"
 
+#include <iostream>
+#include <sstream>
+
 class BinaryExpression : public Expression {
 	// FIXME: This doesn't allow for double byte
 	// operators or things like that, use a better
@@ -14,6 +17,14 @@ class BinaryExpression : public Expression {
 public:
 	BinaryExpression(char op, Expression *lhs, Expression *rhs)
 		: opChar(op), LHS(lhs), RHS(rhs) {}
+
+	std::string getStrRep() {
+		std::stringstream ss;
+		ss << LHS->getStrRep();
+		ss << " " << opChar << " ";
+		ss << RHS->getStrRep();
+		return ss.str();
+	}
 };
 
 #endif // AST_BINARY_EXPRESSION_H

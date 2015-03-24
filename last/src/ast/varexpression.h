@@ -1,6 +1,7 @@
 #ifndef AST_VAR_EXPRESSION_H
 #define AST_VAR_EXPRESSION_H
 
+#include <iostream>
 #include <string>
 
 #include "expression.h"
@@ -10,7 +11,13 @@ class VarExpression : public Expression {
 	std::string symbol;
 
 public:
-	VarExpression(const std::string &name) : symbol(name) {}
+	VarExpression(const std::string &name) : symbol(name) {
+		std::cout << "Variable reference: " << getStrRep() << std::endl;
+	}
+
+	std::string getStrRep() {
+		return symbol;
+	}
 	
 };
 

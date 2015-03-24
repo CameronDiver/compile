@@ -33,8 +33,7 @@ public:
 private:
 	unsigned int tokenIdx;
 	std::vector<Token> *tokens;
-
-	unsigned int getTokenType(const Token &t);
+	
 	// create the AST
 	void parse();
 
@@ -46,6 +45,7 @@ private:
 	Expression *parseIdentifierExpression();
 	Expression *parseExpression();
 
+	Expression *parseFunctionDefinition();
 
 
 	// TODO: Move these out of this class if necessary
@@ -100,6 +100,10 @@ private:
 
 		return ret;
 	}
+
+
+	// the 'root node' of the tree
+	std::vector<Expression *> tree;
 };
 
 
