@@ -111,5 +111,6 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 		lastC = c;
 	}
 
+	addIfNotEmpty(tokens, ss, line);
 	return true;
 }
