@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 
 #include "expression.h"
@@ -13,6 +14,24 @@ public:
 	std::vector<Expression *> args;
 
 	Call(std::string fname, std::vector<Expression *> fargs) : symbol(fname), args(fargs){}
+
+#if defined(DEBUG)
+	std::string prettyPrint() {
+		std::stringstream ss;
+		ss << "Function call: " << symbol << "(";
+		bool fst = true;
+		for(int x = 0; x < args.size(); ++x) {
+			if(fst){
+				ss << args[x];
+				fst = false;
+			} else 
+				ss << ", " << args[x];
+		}
+
+		ss << ")";
+		return ss.str();
+	}
+#endif
 
 };
 
