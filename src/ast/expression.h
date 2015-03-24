@@ -7,7 +7,9 @@ class Expression {
 public:
 	virtual ~Expression() {};
 
-	virtual std::string prettyPrint()=0;
+#if defined(DEBUG)
+	virtual std::string prettyPrint() = 0;
+#endif
 };
 
 #endif // AST_EXPRESSION_H
