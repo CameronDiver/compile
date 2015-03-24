@@ -21,6 +21,8 @@ public:
 		OPEN_PAREN,
 		CLOSE_PAREN,
 
+		DELIMETER,
+
 		TYPE_NAME,
 
 		TOKEN_UNKNOWN

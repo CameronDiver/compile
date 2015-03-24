@@ -31,6 +31,8 @@ Token::Type Token::getTypeFromString(std::string data) {
 
 	if(data.compare(")") == 0) return CLOSE_PAREN;
 
+	if(data.compare(";") == 0) return DELIMETER;
+
 	// if none of those passed, test for it being a generic symbol, if it
 	// isn't then pass an unknown
 	if(isSymbol(data)) return SYMBOL;
@@ -44,7 +46,7 @@ static inline void addIfNotEmpty(std::vector<Token> &tokens, std::stringstream &
 	str = trim(str);
 
 	if(str.length() != 0) {
-		std::cout << "Adding Token: " << str << std::endl;
+		std::cout << "Adding Token: " << str << " " << getTokenSource() << ":" << line << std::endl;
 		Token t(str, getTokenSource(), line);
 		tokens.push_back(t);
 	}
@@ -61,7 +63,11 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 		switch(c) {
 			case '\n':
 				addIfNotEmpty(tokens, ss, line);
+				ss << ';';
+				addIfNotEmpty(tokens, ss, line);
 				++line;
+			break;	
+
 			break;
 			case ' ':
 			case '\t':
@@ -73,6 +79,7 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 			case '|':
 			case '(':
 			case ')':
+			case ';':
 				//FIXME: Make another helper function which allows sending what type of
 				//token this is to avoid having to re-work it out
 				addIfNotEmpty(tokens, ss, line);
