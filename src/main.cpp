@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
 	filename = argv[1];
 
 	// Open the file so that the tokeniser can read the characters
-	file.open(filename, std::ifstream::in);
+	file.open(filename.c_str(), std::ifstream::in);
 
 	std::vector<Token> tokens;
 	if(!Token::tokenize(tokens)) {
