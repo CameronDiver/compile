@@ -12,7 +12,7 @@
 
 typedef std::vector<std::pair<BuiltinType, std::string>> ArgPair;
 
-class FunctionDefintion { // TODO: extend something like 'RootStatement'
+class FunctionDefinition { // TODO: extend something like 'RootStatement'
 public:
 	BuiltinType type;
 	std::string fname;
@@ -20,12 +20,12 @@ public:
 
 	FunctionBody *body;
 
-	FunctionDefintion(BuiltinType t, std::string symbolName, ArgPair args, FunctionBody *fbody)
+	FunctionDefinition(BuiltinType t, std::string symbolName, ArgPair args, FunctionBody *fbody)
 		: type(t), fname(symbolName), arguments(args), body(fbody) {}
 
 #if defined(DEBUG)
 	std::string prettyPrint() {
-		stringstream ss;
+		std::stringstream ss;
 		ss << "Function definition: Type:" << type << ", "  << fname << " [" << arguments.size() << " args]";
 		return ss.str(); 
 	}
