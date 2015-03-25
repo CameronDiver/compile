@@ -9,6 +9,10 @@ Token::Token(std::string data, std::string file, int _line){
 	type = getTypeFromString(data);
 }
 
+Token::Type Token::getType() {
+	return type;
+}
+
 Token::Type Token::getTypeFromString(std::string data) {
 	// check if it's a reserved keyword 
 	if(keywordLookup(data) != NOT_KEYWORD) return KEYWORD;

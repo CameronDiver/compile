@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <cstdio>
 
 class Token {
 public:
@@ -38,6 +39,8 @@ public:
 	Token(std::string data, Type t, std::string file, int _line)
 	: strData(data), type(t), filename(file), line(_line) {}
 
+
+	Type getType();
 
 	static bool tokenize(std::vector<Token> &tokens);
 
