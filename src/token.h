@@ -26,6 +26,8 @@ public:
 
 		TYPE_NAME,
 
+		END,
+
 		TOKEN_UNKNOWN
 	};
 
@@ -56,5 +58,8 @@ private:
 
 
 };
+
+// function definition to be able to print type names
+std::ostream& operator<<(std::ostream& out, const Token::Type t);
 
 #endif // TOKEN_H

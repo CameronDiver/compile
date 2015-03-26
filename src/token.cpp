@@ -22,6 +22,8 @@ Token::Type Token::getTypeFromString(std::string data) {
 	
 	if(operatorLookup(data) != NOT_OP) return OPERATOR;
 
+	if(data.compare("end")) return END;
+
 	// if not check it's an integer or float literal
 	if(isInteger(data)) return INT_LITERAL;
 
@@ -50,7 +52,9 @@ static inline void addIfNotEmpty(std::vector<Token> &tokens, std::stringstream &
 	str = trim(str);
 
 	if(str.length() != 0) {
-		std::cout << "Adding Token: " << str << " " << getTokenSource() << ":" << line << std::endl;
+#if defined(DEBUG) 
+		//std::cout << "Adding Token: " << str << " " << getTokenSource() << ":" << line << std::endl;
+#endif
 		Token t(str, getTokenSource(), line);
 		tokens.push_back(t);
 	}
@@ -67,7 +71,8 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 		switch(c) {
 			case '\n':
 				addIfNotEmpty(tokens, ss, line);
-				ss << ';';
+				// make it clear the delimiter was the newline
+				ss << "\\n";
 				addIfNotEmpty(tokens, ss, line);
 				++line;
 			break;	
@@ -117,4 +122,28 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 
 	addIfNotEmpty(tokens, ss, line);
 	return true;
+}
+
+std::ostream& operator<<(std::ostream& out, const Token::Type t) {
+	const char *s = 0;
+
+	#define SWITCH_STRING(a) case(a): s = #a; break;
+	switch(t){
+		SWITCH_STRING(Token::KEYWORD);
+		SWITCH_STRING(Token::INT_LITERAL);
+		SWITCH_STRING(Token::FLOAT_LITERAL);
+		SWITCH_STRING(Token::SYMBOL);
+		SWITCH_STRING(Token::SEPERATOR);
+		SWITCH_STRING(Token::OPERATOR);
+		SWITCH_STRING(Token::ARG_LIST_CONTAINER);
+		SWITCH_STRING(Token::OPEN_PAREN);
+		SWITCH_STRING(Token::CLOSE_PAREN);
+		SWITCH_STRING(Token::DELIMETER);
+		SWITCH_STRING(Token::TYPE_NAME);
+		SWITCH_STRING(Token::END)
+		SWITCH_STRING(Token::TOKEN_UNKNOWN);
+	}
+	#undef SWITCH_STRING
+
+	return out << s;
 }
