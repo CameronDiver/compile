@@ -10,18 +10,18 @@
 #include "expression.h"
 #include "functionbody.h"
 
-typedef std::vector<std::pair<BuiltinType, std::string>> ArgPair;
+typedef std::pair<BuiltinType, std::string> ArgPair;
 
 class FunctionDefinition { // TODO: extend something like 'RootStatement'
 public:
 	BuiltinType type;
 	std::string fname;
-	ArgPair arguments;
+	std::vector<ArgPair> arguments;
 
 	FunctionBody *body;
 
-	FunctionDefinition(BuiltinType t, std::string symbolName, ArgPair args, FunctionBody *fbody)
-		: type(t), fname(symbolName), arguments(args), body(fbody) {}
+	FunctionDefinition(BuiltinType t, std::string symbolName, std::vector<ArgPair> args, FunctionBody *fbody)
+		: type(t), fname(symbolName), arguments(args), body(fbody) { prettyPrint(); }
 
 #if defined(DEBUG)
 	std::string prettyPrint() {
