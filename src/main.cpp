@@ -6,6 +6,7 @@
 
 #include "builtins.h"
 #include "token.h"
+#include "ast.h"
 
 static std::map<std::string, BuiltinType> 	types;
 static std::map<std::string, Keyword>		keywords;
@@ -82,6 +83,9 @@ int main(int argc, char *argv[]) {
 		std::cout << "Error: error tokenizing input" << std::endl;
 		return -1;
 	}
+
+	// try to build the syntax tree
+	AbstractSyntaxTree *tree = new AbstractSyntaxTree(tokens);
 
 
 
