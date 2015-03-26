@@ -56,6 +56,9 @@ std::string &rtrim(std::string &s);
 std::string &trim(std::string &s);
 
 
+// helper function to print the type from enum
+std::ostream& operator<<(std::ostream &out, const BuiltinType type);
+
 
 
 

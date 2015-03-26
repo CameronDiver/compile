@@ -42,3 +42,16 @@ std::string &rtrim(std::string &s) {
 std::string &trim(std::string &s) {
 	return ltrim(rtrim(s));
 }
+
+std::ostream& operator<<(std::ostream &out, const BuiltinType type){
+	const char *s = 0;
+	#define SWITCH_STRING(a) case(a): s = #a; break;
+	switch(type){
+		SWITCH_STRING(INTEGER);
+		SWITCH_STRING(FLOAT);
+		SWITCH_STRING(TYPE_UNKNOWN);
+	}
+	#undef SWITCH_STRING
+
+	return out << s;
+}
