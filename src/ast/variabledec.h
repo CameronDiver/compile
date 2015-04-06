@@ -12,10 +12,10 @@ public:
 	BuiltinType type;
 	std::string symbol;
 
-	Expression *RHS = NULL;
+	Expression *RHS;
 
 	VariableDeclaration(BuiltinType _type, std::string name)
-	: type(_type), symbol(name) {}
+	: type(_type), symbol(name) {RHS = NULL;}
 	VariableDeclaration(BuiltinType _type, std::string name, Expression *rhs)
 	: type(_type), symbol(name), RHS(rhs) {}
 
