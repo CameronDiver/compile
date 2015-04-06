@@ -22,10 +22,10 @@ public:
 		bool fst = true;
 		for(int x = 0; x < args.size(); ++x) {
 			if(fst){
-				ss << args[x];
+				ss << args[x]->prettyPrint();
 				fst = false;
 			} else 
-				ss << ", " << args[x];
+				ss << ", " << args[x]->prettyPrint();
 		}
 
 		ss << ")";
