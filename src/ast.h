@@ -24,7 +24,7 @@ public:
 	AbstractSyntaxTree(std::vector<Token> &tokens);
 
 private:
-	int tokenIdx = 0;
+	int tokenIdx;
 	Token *currentToken;
 	std::vector<Token> tokens;
 	std::vector<FunctionDefinition *> functions;
@@ -58,6 +58,14 @@ private:
 
 
 	void error(Token *t, std::string message);
+
+	// functions good for debugging
+#if defined(DEBUG)
+	// print the last 3 tokens of the stack, in reverse order,
+	// as if being popped off
+	void showLast3Tokens();
+#endif
+
 };
 
 #endif // AST_H

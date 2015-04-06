@@ -6,6 +6,7 @@ AbstractSyntaxTree::AbstractSyntaxTree(std::vector<Token> &tokens) {
 	// while there is tokens left, attempt to parse them as a top level statement
 	this->tokens = tokens;
 	currentToken = &tokens[0];
+	tokenIdx = 0;
 	
 	while(currentToken != NULL) {
 
@@ -156,7 +157,8 @@ FunctionBody *AbstractSyntaxTree::parseFunctionBody() {
 				foundEnd = true;
 				break;
 			} else {
-				std::cout << "this is the return " << currentToken->getType() << std::endl;
+				//std::cout << "this is the return " << currentToken->getType() << std::endl;
+				error(currentToken, "Unexpected token");
 				return NULL;
 			}
 		} 
@@ -203,9 +205,14 @@ Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 			return NULL;
 		break;
 		default:
+			error(currentToken, "Found unexpected type " + currentToken->getType());
+			// leave this in for now until the new error message is seen and checked to produce
+			// correct results
 			std::cout << "Error: found unexpected type `"
 				<< currentToken->getType() << "' value: '" 
 				<< currentToken->strData <<"' at ast.cpp:" << __LINE__ << std::endl;
+
+			showLast3Tokens();
 			return NULL;
 		break;
 	}
@@ -219,6 +226,10 @@ Expression *AbstractSyntaxTree::parseExpression() {
 			return LHS;
 		}
 		return NULL;
+	}
+
+	if(currentToken->getType() == Token::SEPERATOR) {
+		return LHS;
 	}
 
 	return parseBinaryOperationRHS(0, LHS);
@@ -241,6 +252,7 @@ Expression *AbstractSyntaxTree::parseIdentifierReference() {
 
 Expression *AbstractSyntaxTree::parseFunctionCall() {
 	std::string name = currentToken->strData;
+	
 	getNextToken();
 
 	if(currentToken->getType() != Token::OPEN_PAREN) {
@@ -249,24 +261,24 @@ Expression *AbstractSyntaxTree::parseFunctionCall() {
 	}
 	getNextToken();
 	std::vector<Expression *> args;
-	if(currentToken->getType() != Token::CLOSE_PAREN) {
-		while(true) {
-			Expression *e = parseExpression();
-			if(e == NULL) return NULL;
-			args.push_back(e);
+	while(currentToken->getType() != Token::CLOSE_PAREN) {
+		Expression *e = parseExpression();
 
-			if(currentToken->getType() == Token::CLOSE_PAREN) break;
-			if(currentToken->getType() != Token::SEPERATOR) {
-				error(currentToken, "Expected argument list seperator (',') or argument list end token (')'), got");
-				return NULL;
-			}
-			getNextToken();
+		if(e == NULL) return NULL;
+		args.push_back(e);
+
+		if(currentToken->getType() == Token::CLOSE_PAREN) break;
+		if(currentToken->getType() != Token::SEPERATOR) {
+			error(currentToken, "Expected argument list seperator (',') or argument list end token (')'), got");
+			return NULL;
 		}
+
+		getNextToken();
 	}
 	// eat the close bracket
 	// TODO: check it is a close bracket
 	getNextToken();
-	
+
 	return new Call(name, args);	
 }
 
@@ -379,6 +391,32 @@ Expression *AbstractSyntaxTree::parseVariableDeclaration() {
 
 void AbstractSyntaxTree::error(Token *t, std::string message) {
 	std::cout << "Error: " << message << " `" << t->strData
-			<< "' [" << t->filename << ":"
+			<< "'"
+#if defined(DEBUG)
+			<< " of type " << t->getType()
+#endif
+			<< " [" << t->filename << ":"
 			<< t->line << "]" << std::endl;
+#if defined(DEBUG)
+	showLast3Tokens();
+	
+#endif
 }
+
+#if defined(DEBUG)
+void AbstractSyntaxTree::showLast3Tokens() {
+	int i = 1;
+	std::vector<Token> lastTokens;
+	while(i <= 3 && tokenIdx - i >= 0) {
+		lastTokens.push_back(tokens[tokenIdx - i]);
+		++i;
+	}
+
+	std::cout << "Last 3 tokens in reverse order:" << std::endl;
+	
+	for(int i = 0; i < lastTokens.size(); ++i){
+		Token t = lastTokens[i];
+		std::cout << "\t" << t.getType() << " : " << t.strData << std::endl;
+	}
+}
+#endif
