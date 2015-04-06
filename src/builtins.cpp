@@ -3,6 +3,7 @@
 #include <cctype>
 #include <algorithm>
 #include <sstream>
+#include <functional>
 
 bool isInteger(const std::string &data) {
 	return std::all_of(data.begin(), data.end(), static_cast<int(*)(int)>(std::isdigit));
