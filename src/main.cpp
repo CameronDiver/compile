@@ -103,6 +103,4 @@ int main(int argc, char *argv[]) {
 	// try to build the syntax tree
 	AbstractSyntaxTree *tree = new AbstractSyntaxTree(tokens);
 
-
-
 }

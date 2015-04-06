@@ -2,7 +2,7 @@ int fn | int a, int b |
 	int c = a+b
 	 
 	callthis()
-	print(a)
+	print(a, b)
 
 end
 
