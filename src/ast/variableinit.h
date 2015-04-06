@@ -15,13 +15,13 @@ public:
 	VariableInitialisation(BuiltinType t, std::string _name, Expression *rhs)
 	: type(t), name(_name), RHS(rhs) {}
 
-	#if defined(DUBUG)
+#if defined(DEBUG)
 	std::string prettyPrint() {
 		std::stringstream ss;
-		ss << type << " " << name << " = " << RHS->prettyPrint()
+		ss << type << " " << name << " = " << RHS->prettyPrint();
 		return ss.str(); 
 	}
-	#endif
+#endif
 };
 
 #endif // AST_VARIABLE_INIT_H

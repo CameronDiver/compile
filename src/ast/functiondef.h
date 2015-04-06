@@ -27,6 +27,7 @@ public:
 	std::string prettyPrint() {
 		std::stringstream ss;
 		ss << "Function definition: Type:" << type << ", "  << fname << " [" << arguments.size() << " args]";
+		ss << body->prettyPrint();
 		return ss.str(); 
 	}
 #endif 

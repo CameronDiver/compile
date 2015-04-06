@@ -38,6 +38,7 @@ enum Operator {
 BuiltinType typeLookup(std::string data);
 Keyword keywordLookup(std::string data);
 Operator operatorLookup(std::string data);
+int precedenceLookup(Operator op);
 
 // get the next character in the source file
 // also define in main.cpp, allows the source to come from different places

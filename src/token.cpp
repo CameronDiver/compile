@@ -21,9 +21,7 @@ Token::Type Token::getTypeFromString(std::string data) {
 	if(typeLookup(data) != TYPE_UNKNOWN) return TYPE_NAME;
 	
 	if(operatorLookup(data) != NOT_OP) return OPERATOR;
-
-	if(data.compare("end")) return END;
-
+	
 	// if not check it's an integer or float literal
 	if(isInteger(data)) return INT_LITERAL;
 
@@ -37,7 +35,8 @@ Token::Type Token::getTypeFromString(std::string data) {
 
 	if(data.compare(")") == 0) return CLOSE_PAREN;
 
-	if(data.compare(";") == 0) return DELIMETER;
+	if(data.compare(";") == 0) 		return DELIMETER;
+	if(data.compare("\\n") == 0) 	return DELIMETER;
 
 	// if none of those passed, test for it being a generic symbol, if it
 	// isn't then pass an unknown

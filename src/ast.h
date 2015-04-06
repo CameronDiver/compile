@@ -16,6 +16,8 @@
 #include "ast/functiondef.h"
 #include "ast/functionbody.h"
 #include "ast/variabledec.h"
+#include "ast/variableinit.h"
+
 
 class AbstractSyntaxTree {
 public:
@@ -37,6 +39,21 @@ private:
 	// of the programs are function definitions
 	FunctionDefinition 	*parseTopLevel();
 	FunctionBody 		*parseFunctionBody();
+
+
+	Expression 			*parseExpression();
+	Expression 			*parsePrimaryExpression();
+
+	// attempt to parse the expression as a binary operation, returning the single
+	// expression if not
+	Expression 			*parseBinaryOperationRHS(unsigned int minPrec, Expression *LHS);
+
+	Expression 			*parseVariableDeclaration();
+	Expression 			*parseIntegerLiteral();
+	Expression 			*parseFloatLiteral();
+	Expression 			*parseParenExpression();
+	Expression 			*parseIdentifierReference();
+	Expression 			*parseFunctionCall();
 
 
 

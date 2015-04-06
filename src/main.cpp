@@ -11,6 +11,7 @@
 static std::map<std::string, BuiltinType> 	types;
 static std::map<std::string, Keyword>		keywords;
 static std::map<std::string, Operator>		operators;
+static std::map<Operator, int>				precedence;
 
 static std::ifstream file;
 static std::string filename;
@@ -29,7 +30,15 @@ void installOperators() {
 	operators.insert(std::pair<std::string, Operator>("-", MINUS));
 	operators.insert(std::pair<std::string, Operator>("*", MULT));
 	operators.insert(std::pair<std::string, Operator>("/", DIV));
-	operators.insert(std::pair<std::string, Operator>("=", DIV));
+	operators.insert(std::pair<std::string, Operator>("=", EQUALS));
+}
+
+void installPrecedence() {
+	precedence.insert(std::pair<Operator, int>(PLUS, 20));
+	precedence.insert(std::pair<Operator, int>(MINUS, 20));
+	precedence.insert(std::pair<Operator, int>(MULT, 40));
+	precedence.insert(std::pair<Operator, int>(DIV, 40));
+	precedence.insert(std::pair<Operator, int>(EQUALS, 10));
 }
 
 BuiltinType typeLookup(std::string name) {
@@ -53,6 +62,13 @@ Operator operatorLookup(std::string name) {
 		return operators.at(name);
 }
 
+int precedenceLookup(Operator op) {
+	if(precedence.find(op) == precedence.end()) {
+		// This is an error, stop here
+		return -1;
+	}
+	return precedence.at(op);
+}
 
 char getSourceChar() {
 	return file.get();
