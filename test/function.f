@@ -9,5 +9,6 @@ end
 float floatFunction | float b |
 
 	print(fn(b, b))
+	print(3+3)
 
 end
