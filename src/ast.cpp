@@ -22,7 +22,7 @@ AbstractSyntaxTree::AbstractSyntaxTree(std::vector<Token> &tokens) {
 			}
 			// An error occured trying to parse it
 			// FIXME: Need error handling
-			std::cout << "An error occured" << std::endl;
+			std::cout << "An error occured, exiting" << std::endl;
 			exit(EXIT_FAILURE);
 		}
 #if defined(DEBUG)
@@ -205,7 +205,9 @@ Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 			return NULL;
 		break;
 		default:
-			error(currentToken, "Found unexpected type " + currentToken->getType());
+			std::stringstream errorMsg("Found unexpected type: ");
+			errorMsg << currentToken->getType();
+			error(currentToken, errorMsg.str());
 			// leave this in for now until the new error message is seen and checked to produce
 			// correct results
 			std::cout << "Error: found unexpected type `"
@@ -232,7 +234,8 @@ Expression *AbstractSyntaxTree::parseExpression() {
 		return LHS;
 	}
 
-	return parseBinaryOperationRHS(0, LHS);
+
+	return parseBinaryOperationRHS(NULL, LHS);
 }
 
 Expression *AbstractSyntaxTree::parseIdentifierReference() {
@@ -263,6 +266,7 @@ Expression *AbstractSyntaxTree::parseFunctionCall() {
 	std::vector<Expression *> args;
 	while(currentToken->getType() != Token::CLOSE_PAREN) {
 		Expression *e = parseExpression();
+
 
 		if(e == NULL) return NULL;
 		args.push_back(e);
@@ -325,6 +329,10 @@ Expression *AbstractSyntaxTree::parseBinaryOperationRHS(unsigned int minPrec, Ex
 					return NULL;
 				}
 			}
+		} else if(currentToken->getType() == Token::CLOSE_PAREN) {
+			// if the token is a close bracket, either the function call
+			// or paranthesis expression code should handle it
+			return new BinaryOperation(LHS, op, RHS);
 		}
 
 		LHS = new BinaryOperation(LHS, op, RHS);
