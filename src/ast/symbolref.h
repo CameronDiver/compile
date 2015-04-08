@@ -12,6 +12,8 @@ public:
 
 	SymbolReference(std::string data) : name(data) {};
 
+	llvm::Value *codegen(){ return NULL; }
+
 #if defined(DEBUG)
 	std::string prettyPrint() {
 		std::stringstream ss;

@@ -15,6 +15,8 @@ public:
 	VariableInitialisation(BuiltinType t, std::string _name, Expression *rhs)
 	: type(t), name(_name), RHS(rhs) {}
 
+	llvm::Value *codegen() {return NULL;}
+
 #if defined(DEBUG)
 	std::string prettyPrint() {
 		std::stringstream ss;

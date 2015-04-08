@@ -23,6 +23,8 @@ public:
 	FunctionDefinition(BuiltinType t, std::string symbolName, std::vector<ArgPair> args, FunctionBody *fbody)
 		: type(t), fname(symbolName), arguments(args), body(fbody) { prettyPrint(); }
 
+	llvm::Function *codegen();
+
 #if defined(DEBUG)
 	std::string prettyPrint() {
 		std::stringstream ss;

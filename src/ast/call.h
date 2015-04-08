@@ -15,6 +15,8 @@ public:
 
 	Call(std::string fname, std::vector<Expression *> fargs) : symbol(fname), args(fargs){}
 
+	llvm::Value *codegen();
+
 #if defined(DEBUG)
 	std::string prettyPrint() {
 		std::stringstream ss;

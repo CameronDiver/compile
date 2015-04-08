@@ -14,6 +14,8 @@ public:
 
 	FunctionBody(std::vector<Expression *> stmts): statements(stmts) {}
 
+	llvm::Value *codegen();
+	
 #if defined(DEBUG)
 	std::string prettyPrint() {
 		std::stringstream ss;

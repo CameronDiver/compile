@@ -12,6 +12,8 @@ public:
 	uint32_t value;
 	IntLiteral(uint32_t val) : value(val) {}
 
+	llvm::Value *codegen();
+
 #if defined(DEBUG)
 	std::string prettyPrint() {
 		std::stringstream ss;

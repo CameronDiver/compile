@@ -19,6 +19,8 @@ public:
 	VariableDeclaration(BuiltinType _type, std::string name, Expression *rhs)
 	: type(_type), symbol(name), RHS(rhs) {}
 
+	llvm::Value *codegen() {return NULL;}
+
 #if defined(DEBUG)
 	std::string prettyPrint() {
 		std::stringstream ss;
