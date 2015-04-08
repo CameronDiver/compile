@@ -1,8 +1,17 @@
 #ifndef BUILTINS_H
 #define BUILTINS_H
 
+
+#include "llvm/IR/Verifier.h"
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
 #include <string>
 
+extern llvm::Module *Module;
+extern llvm::IRBuilder<> Builder;
+extern std::map<std::string, llvm::Value*> NamedValues;
 
 enum BuiltinType {
 	INTEGER, 	// 32 bit integer

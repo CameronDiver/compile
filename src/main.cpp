@@ -8,6 +8,10 @@
 #include "token.h"
 #include "ast.h"
 
+llvm::Module *Module;
+llvm::IRBuilder<> Builder(llvm::getGlobalContext());
+std::map<std::string, llvm::Value*> NamedValues;
+
 static std::map<std::string, BuiltinType> 	types;
 static std::map<std::string, Keyword>		keywords;
 static std::map<std::string, Operator>		operators;
