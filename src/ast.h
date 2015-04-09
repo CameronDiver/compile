@@ -18,16 +18,18 @@
 #include "ast/variabledec.h"
 #include "ast/variableinit.h"
 
+// the current function
+extern FunctionDefinition *currentFn;
 
 class AbstractSyntaxTree {
 public:
+	std::vector<FunctionDefinition *> functions;
 	AbstractSyntaxTree(std::vector<Token> &tokens);
 
 private:
 	int tokenIdx;
 	Token *currentToken;
 	std::vector<Token> tokens;
-	std::vector<FunctionDefinition *> functions;
 
 	// Increment the token index and return the new token
 	Token *getNextToken();

@@ -149,6 +149,12 @@ FunctionBody *AbstractSyntaxTree::parseFunctionBody() {
 			break;
 		}	
 
+		// eat any delimiters
+		while(currentToken->getType() == Token::DELIMETER) 
+			// re-assign currentToken here so the compiler doesn't
+			// optomise out this loop
+			currentToken = getNextToken();
+
 		Expression *exp = parseExpression();
 		if(exp == NULL) {
 			if(currentToken->getType() == Token::DELIMETER) {
@@ -157,7 +163,6 @@ FunctionBody *AbstractSyntaxTree::parseFunctionBody() {
 				foundEnd = true;
 				break;
 			} else {
-				//std::cout << "this is the return " << currentToken->getType() << std::endl;
 				error(currentToken, "Unexpected token");
 				return NULL;
 			}
@@ -204,17 +209,14 @@ Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 			getNextToken();
 			return NULL;
 		break;
-		default:
-			std::stringstream errorMsg("Found unexpected type: ");
-			errorMsg << currentToken->getType();
-			error(currentToken, errorMsg.str());
-			// leave this in for now until the new error message is seen and checked to produce
-			// correct results
-			std::cout << "Error: found unexpected type `"
-				<< currentToken->getType() << "' value: '" 
-				<< currentToken->strData <<"' at ast.cpp:" << __LINE__ << std::endl;
+		case Token::KEYWORD:
+			if(keywordLookup(currentToken->strData) == END)
+				return NULL;
 
-			showLast3Tokens();
+		// leave off the break for this entry so anything else 
+		// will confuse it
+		default:
+			error(currentToken, "Found unexpected token ");
 			return NULL;
 		break;
 	}
