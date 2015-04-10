@@ -11,7 +11,7 @@ bool isInteger(const std::string &data) {
 
 bool isSymbol(const std::string &data) {
 	// FIXME: Change this code to accept more things for symbols, not just alpha chars
-	return std::all_of(data.begin(), data.end(), static_cast<int(*)(int)>(std::isalpha));
+	return std::all_of(data.begin(), data.end(), [] (int a) -> int {return a == '_' || std::isalpha(a);});
 }
 
 bool isFloat(const std::string &data) {
