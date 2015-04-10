@@ -14,8 +14,10 @@ public:
 
 	VariableInitialisation(BuiltinType t, std::string _name, Expression *rhs)
 	: type(t), name(_name), RHS(rhs) {}
+	VariableInitialisation(BuiltinType t, std::string _name)
+	: type(t), name(_name), RHS(NULL) {}
 
-	llvm::Value *codegen() {return NULL;}
+	llvm::Value *codegen();
 
 #if defined(DEBUG)
 	std::string prettyPrint() {
