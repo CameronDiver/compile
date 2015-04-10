@@ -19,6 +19,8 @@ llvm::Function *FunctionDefinition::codegen() {
 	llvm::Function *fn = 
 	llvm::Function::Create(fnType, 
 		llvm::Function::ExternalLinkage, fname, Module);
+	// TODO: check that this succeeded then add information into
+	// the symbols array
 
 	// check that there isn't already a function with the same name
 	if(fn->getName() != fname) {
@@ -39,20 +41,23 @@ llvm::Function *FunctionDefinition::codegen() {
 
 	}
 
+
 	// set all the argument names
 	unsigned idx = 0;
 	for(llvm::Function::arg_iterator i = fn->arg_begin();
 		idx != arguments.size(); ++i, ++idx) {
 		i->setName(arguments[idx].second);
-
-		CodeGen::Symbols[arguments[idx].second] = i;
 	}
 
 	// create a new basic block for entering the function
 	llvm::BasicBlock *basicBlock = llvm::BasicBlock::Create(llvm::getGlobalContext(), "entry", fn);
 	Builder.SetInsertPoint(basicBlock);
 
+	// Don't allocate the function variables on the stack,
+	// presumably they are already there
+	allocateArgVars(fn);
 	if(llvm::Value *ret = body->codegen()) {
+		
 		Builder.CreateRet(ret);
 
 		llvm::verifyFunction(*fn);
@@ -62,4 +67,19 @@ llvm::Function *FunctionDefinition::codegen() {
 	// error
 	fn->eraseFromParent();
 	return NULL;
+}
+
+void FunctionDefinition::allocateArgVars(llvm::Function *fn) {
+	llvm::Function::arg_iterator iter = fn->arg_begin();
+
+	for(unsigned i = 0; i < arguments.size(); ++i, ++iter) {
+		llvm::AllocaInst *allocation = CodeGen::createEntryBlockAlloca(
+			fn, arguments[i].second, arguments[i].first);
+
+		// store the initial value
+		Builder.CreateStore(iter, allocation);
+
+		body->stackVariables[arguments[i].second] = allocation;
+
+	}
 }

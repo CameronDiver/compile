@@ -24,6 +24,7 @@ public:
 		: type(t), fname(symbolName), arguments(args), body(fbody) { prettyPrint(); }
 
 	llvm::Function *codegen();
+	void allocateArgVars(llvm::Function *fn);
 
 #if defined(DEBUG)
 	std::string prettyPrint() {
