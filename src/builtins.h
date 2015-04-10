@@ -3,6 +3,9 @@
 
 
 #include "llvm/IR/Verifier.h"
+#include "llvm/Bitcode/ReaderWriter.h"
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/raw_os_ostream.h"
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
@@ -47,7 +50,7 @@ enum Operator {
 BuiltinType typeLookup(std::string data);
 Keyword keywordLookup(std::string data);
 Operator operatorLookup(std::string data);
-int precedenceLookup(Operator op);
+unsigned int precedenceLookup(Operator op);
 
 // get the next character in the source file
 // also define in main.cpp, allows the source to come from different places
