@@ -9,6 +9,7 @@
 
 // the current function
 extern FunctionDefinition *currentFn;
+extern llvm::Function *currentFnllvm;
 
 class CodeGen {
 
@@ -17,7 +18,9 @@ public:
 	static llvm::Type *getTypeFromBuiltin(BuiltinType t);
 	// create a allocate instruction for creating variables on the stack
 	static llvm::AllocaInst *
-		createEntryBlockAlloca(llvm::Function *fn, const std::string name);
+		createEntryBlockAlloca(llvm::Function *fn, const std::string name, BuiltinType t);
+
+	static llvm::Value *getInitialiser(BuiltinType t);
 
 
 	CodeGen(AbstractSyntaxTree *tree);
