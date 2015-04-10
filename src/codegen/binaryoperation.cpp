@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "codegen.h"
+
 llvm::Value *BinaryOperation::codegen() {
 	llvm::Value *L = LHS->codegen();
 	llvm::Value *R = RHS->codegen();
@@ -14,31 +16,41 @@ llvm::Value *BinaryOperation::codegen() {
 
 	switch(op) {
 		case PLUS:
-			if(!L->getType()->isIntegerTy() || !R->getType()->isIntegerTy()) {
+			//L->dump();
+			/*if(!L->getType()->isIntegerTy() || !R->getType()->isIntegerTy()) {
 				std::cout << "Only integer addition supported" << std::endl;
 				exit(-1);
-			}
+			}*/
 			return Builder.CreateAdd(L, R, "addtmp");
 		break;
 		case MINUS:
-			if(!L->getType()->isIntegerTy() || !R->getType()->isIntegerTy()) {
-				std::cout << "Only integer subtraction supported" << std::endl;
-				exit(-1);
-			}
+			// if(!L->getType()->isIntegerTy() || !R->getType()->isIntegerTy()) {
+			// 	std::cout << "Only integer subtraction supported" << std::endl;
+			// 	exit(-1);
+			// }
 			return Builder.CreateSub(L, R, "subtmp");
 		break;
 		case MULT:
-			if(!L->getType()->isIntegerTy() || !R->getType()->isIntegerTy()) {
-				std::cout << "Only integer multiplication supported" << std::endl;
-				exit(-1);
-			}
+			// if(!L->getType()->isIntegerTy() || !R->getType()->isIntegerTy()) {
+			// 	std::cout << "Only integer multiplication supported" << std::endl;
+			// 	exit(-1);
+			// }
 			return Builder.CreateMul(L, R, "multmp");
 		break;
 		// case DIV:
 		// break;
 
-		// case EQUALS:
-		// break;
+		case EQUALS:
+		{
+			// check that the LHS is definitely a symbol
+			SymbolReference *s = dynamic_cast<SymbolReference *>(LHS);
+			if(s == NULL) {
+				std::cout << "only symbols can be on left hand side of =" << std::endl;
+			}
+
+			return Builder.CreateStore(R, L);
+		}
+		break;
 
 
 		case NOT_OP:
