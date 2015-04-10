@@ -30,6 +30,6 @@ llvm::Value *Call::codegen() {
 	}
 
 	std::stringstream name("");
-	name "call_"<< symbol << "_tmp"; 
+	name << "call_"<< symbol << "_tmp"; 
 	return Builder.CreateCall(fn, argValues, name.str());
 }
