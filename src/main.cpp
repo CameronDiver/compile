@@ -6,16 +6,22 @@
 
 #include "builtins.h"
 #include "token.h"
+#include "functiondef.h"
 #include "ast.h"
+#include "codegen/codegen.h"
 
 llvm::Module *Module;
 llvm::IRBuilder<> Builder(llvm::getGlobalContext());
 std::map<std::string, llvm::Value*> NamedValues;
 
+// A pointer to the function currently being built
+FunctionDefinition *currentFn;
+llvm::Function *currentFnllvm;
+
 static std::map<std::string, BuiltinType> 	types;
 static std::map<std::string, Keyword>		keywords;
 static std::map<std::string, Operator>		operators;
-static std::map<Operator, int>				precedence;
+static std::map<Operator, unsigned int>		precedence;
 
 static std::ifstream file;
 static std::string filename;
@@ -38,11 +44,12 @@ void installOperators() {
 }
 
 void installPrecedence() {
-	precedence.insert(std::pair<Operator, int>(PLUS, 20));
-	precedence.insert(std::pair<Operator, int>(MINUS, 20));
-	precedence.insert(std::pair<Operator, int>(MULT, 40));
-	precedence.insert(std::pair<Operator, int>(DIV, 40));
-	precedence.insert(std::pair<Operator, int>(EQUALS, 10));
+	precedence[PLUS] = 20;
+	precedence[MINUS] = 20;
+	precedence[MULT] = 40;
+	precedence[DIV] = 40;
+	precedence[EQUALS] = 10;
+	
 }
 
 BuiltinType typeLookup(std::string name) {
@@ -66,7 +73,7 @@ Operator operatorLookup(std::string name) {
 		return operators.at(name);
 }
 
-int precedenceLookup(Operator op) {
+unsigned int precedenceLookup(Operator op) {
 	if(precedence.find(op) == precedence.end()) {
 		// This is an error, stop here
 		return -1;
@@ -87,6 +94,8 @@ int main(int argc, char *argv[]) {
 	installTypes();
 	installKeywords();
 	installOperators();
+	installPrecedence();
+
 
 	if(argc < 2) {
 		std::cout << "Error: Need input file" << std::endl;
@@ -107,5 +116,17 @@ int main(int argc, char *argv[]) {
 	// try to build the syntax tree
 	AbstractSyntaxTree *tree = new AbstractSyntaxTree(tokens);
 
+	// generate code
+	currentFn = NULL;
 	Module = new llvm::Module("compiler", llvm::getGlobalContext());
+
+	CodeGen *code = new CodeGen(tree);
+
+	std::ofstream file("out.ll");
+	llvm::raw_os_ostream stream(file);
+	//llvm::WriteBitcodeToFile(Module, stream);
+	Module->print(stream, NULL);
+	Module->dump();
+
+	return EXIT_SUCCESS;
 }
