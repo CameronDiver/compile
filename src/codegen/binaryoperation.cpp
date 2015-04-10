@@ -7,6 +7,26 @@
 #include "codegen.h"
 
 llvm::Value *BinaryOperation::codegen() {
+
+	if(op == EQUALS) {
+		// check that the LHS is definitely a symbol
+		SymbolReference *s = dynamic_cast<SymbolReference *>(LHS);
+		if(s == NULL) {
+			std::cout << "only symbols can be on left hand side of =" << std::endl;
+		}
+
+		// need the address here
+		llvm::Value *L = s->codegen(true);
+		llvm::Value *R = RHS->codegen();
+		if(!L || !R) {
+			std::cout << "Null LLVM value from binary operation" << std::endl;
+			exit(-1);
+		}
+
+		return Builder.CreateStore(R, L);
+	}
+
+
 	llvm::Value *L = LHS->codegen();
 	llvm::Value *R = RHS->codegen();
 	if(L == NULL | R == NULL) {
@@ -39,18 +59,6 @@ llvm::Value *BinaryOperation::codegen() {
 		break;
 		// case DIV:
 		// break;
-
-		case EQUALS:
-		{
-			// check that the LHS is definitely a symbol
-			SymbolReference *s = dynamic_cast<SymbolReference *>(LHS);
-			if(s == NULL) {
-				std::cout << "only symbols can be on left hand side of =" << std::endl;
-			}
-
-			return Builder.CreateStore(R, L);
-		}
-		break;
 
 
 		case NOT_OP:

@@ -5,7 +5,9 @@
 using namespace llvm;
 
 // FIXME: This function assumes we are already in a function
-Value *SymbolReference::codegen() {
+// TODO: need to know whether we need the address or the value
+// for either assigning or referencing
+Value *SymbolReference::codegen(bool address=false) {
 	FunctionDefinition *fn = currentFn;
 
 	Value *v;
@@ -19,5 +21,12 @@ Value *SymbolReference::codegen() {
 			exit(-1);
 		}
 	}
-	return v;
+	if(address)
+		return v;
+	
+	return Builder.CreateLoad(v, name);
+}
+
+Value *SymbolReference::codegen() {
+	return codegen(false);
 }

@@ -12,6 +12,7 @@ public:
 
 	SymbolReference(std::string data) : name(data) {};
 
+	llvm::Value *codegen(bool address);
 	llvm::Value *codegen();
 
 #if defined(DEBUG)
