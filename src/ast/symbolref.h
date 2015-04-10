@@ -12,7 +12,7 @@ public:
 
 	SymbolReference(std::string data) : name(data) {};
 
-	llvm::Value *codegen(){ return NULL; }
+	llvm::Value *codegen();
 
 #if defined(DEBUG)
 	std::string prettyPrint() {
