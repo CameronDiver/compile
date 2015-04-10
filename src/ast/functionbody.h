@@ -10,6 +10,10 @@
 
 class FunctionBody {
 public:
+
+	std::map<std::string, llvm::AllocaInst *> stackVariables;
+	std::map<std::string, llvm::Value *> argVariables;
+
 	std::vector<Expression *> statements;
 
 	FunctionBody(std::vector<Expression *> stmts): statements(stmts) {}
