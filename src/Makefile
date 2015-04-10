@@ -4,13 +4,15 @@ CXX=clang++
 LLVM_CONFIG = llvm-config-3.5
 
 CXXFLAGS = -I`$(LLVM_CONFIG) --includedir --cxxflags` -Iast/ -I. -Wall -std=c++11 -DDEBUG -g
-LDFLAGS  = `$(LLVM_CONFIG) --ldflags --system-libs --libs core`
+LDFLAGS  = `$(LLVM_CONFIG) --ldflags --system-libs --libs core native bitwriter`
+
+CODEGEN_DIR=$(BUILD_DIR)/codegen
 
 OBJS = $(BUILD_DIR)/ast.o $(BUILD_DIR)/builtins.o $(BUILD_DIR)/main.o $(BUILD_DIR)/token.o \
-$(BUILD_DIR)/codegen/intliteral.o $(BUILD_DIR)/codegen/binaryoperation.o $(BUILD_DIR)/codegen/call.o\
-$(BUILD_DIR)/codegen/floatliteral.o $(BUILD_DIR)/codegen/functiondef.o $(BUILD_DIR)/codegen/codegen.o\
-$(BUILD_DIR)/codegen/functionbody.o
-GLOBAL_DEPENDS = ast/*.h
+$(CODEGEN_DIR)/intliteral.o $(CODEGEN_DIR)/binaryoperation.o $(CODEGEN_DIR)/call.o\
+$(CODEGEN_DIR)/floatliteral.o $(CODEGEN_DIR)/functiondef.o $(CODEGEN_DIR)/codegen.o\
+$(CODEGEN_DIR)/functionbody.o $(CODEGEN_DIR)/symbolref.o $(CODEGEN_DIR)/variableinit.o
+GLOBAL_DEPENDS = ast/*.h builtins.h
 EXE = $(BUILD_DIR)/compile
 
 ALL: $(EXE)
