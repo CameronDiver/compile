@@ -15,7 +15,6 @@
 #include "ast/binaryoperation.h"
 #include "ast/functiondef.h"
 #include "ast/functionbody.h"
-#include "ast/variabledec.h"
 #include "ast/variableinit.h"
 
 // the current function

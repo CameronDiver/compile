@@ -132,8 +132,18 @@ FunctionBody *AbstractSyntaxTree::parseFunctionBody() {
 	std::vector<Expression *> statements;
 
 	while(currentToken != NULL && currentToken->getType() == Token::DELIMETER) getNextToken();
+	
+	if(currentToken == NULL) {
+		std::cout << "Missing Function body" << std::endl;
+		exit(-1);
+	}
 
-	while(currentToken != NULL) {
+
+	if(currentToken->getType() == Token::KEYWORD && keywordLookup(currentToken->strData) == END) {
+		return new FunctionBody(statements);
+	}
+
+	while(!(currentToken->getType() == Token::KEYWORD && keywordLookup(currentToken->strData) == END)) {
 		// keep looping until we get to an end token
 		// we don't have to keep track of how many constructs are 
 		// open and count the ends, because the internal parsing
@@ -142,18 +152,6 @@ FunctionBody *AbstractSyntaxTree::parseFunctionBody() {
 		// in which case the while above will fail and it can be detected
 		// std::cout << "here parseFunctionBody, token: " << currentToken->getType() 
 		// 	<< " - " << currentToken->strData << std::endl;
-
-
-		if(currentToken->getType() == Token::KEYWORD && keywordLookup(currentToken->strData) == END) {
-			foundEnd = true;
-			break;
-		}	
-
-		// eat any delimiters
-		while(currentToken->getType() == Token::DELIMETER) 
-			// re-assign currentToken here so the compiler doesn't
-			// optomise out this loop
-			currentToken = getNextToken();
 
 		Expression *exp = parseExpression();
 		if(exp == NULL) {
@@ -166,30 +164,35 @@ FunctionBody *AbstractSyntaxTree::parseFunctionBody() {
 				error(currentToken, "Unexpected token");
 				return NULL;
 			}
-		} 
+		}
 
 		statements.push_back(exp);
+
+		// eat any delimiters
+		while(currentToken != NULL && currentToken->getType() == Token::DELIMETER) 
+			// re-assign currentToken here so the compiler doesn't
+			// optomise out this loop
+			currentToken = getNextToken();
+
+		if(currentToken == NULL) {
+			std::cout << "Missing function end" << std::endl;
+			exit(-1);
+		}
+
 	}
 
-	if(!foundEnd){
-		error(currentToken, "Couldn't find function end, got ");
-		return NULL;
-	}
-	
 	getNextToken(); // eat the 'end'
 	return new FunctionBody(statements);
 }
 
 Expression *AbstractSyntaxTree::parsePrimaryExpression() {
-	// if the first token is a type name it's declaring a variable
 	
 	// std::cout << "parsePrimaryExpression: " << currentToken->getType()
 	// 	<< " - " << currentToken->strData << std::endl;
+	if(currentToken == NULL) return NULL;
 
 	switch(currentToken->getType()) {
-		// yes I know the breaks are unnecessary but my brain kept
-		// on telling me things were falling through so they are 
-		// staying
+		
 		case Token::TYPE_NAME:
 			return parseVariableDeclaration();
 		break;
@@ -224,6 +227,7 @@ Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 
 Expression *AbstractSyntaxTree::parseExpression() {
 	Expression *LHS = parsePrimaryExpression();
+
 	if(LHS == NULL) {
 		if(currentToken->getType() == Token::DELIMETER) {
 			getNextToken();
@@ -236,8 +240,12 @@ Expression *AbstractSyntaxTree::parseExpression() {
 		return LHS;
 	}
 
+	if(currentToken->getType() == Token::KEYWORD && keywordLookup(currentToken->strData) == END) {
+		return LHS;
+	}
 
-	return parseBinaryOperationRHS(NULL, LHS);
+
+	return parseBinaryOperationRHS(0, LHS);
 }
 
 Expression *AbstractSyntaxTree::parseIdentifierReference() {
@@ -293,15 +301,18 @@ Expression *AbstractSyntaxTree::parseBinaryOperationRHS(unsigned int minPrec, Ex
 	// if it's a closing bracket return
 	if(currentToken->getType() == Token::CLOSE_PAREN) return LHS;
 
+	//if(currentToken->getType() != Token::OPERATOR) return LHS;
+
 	// if it is a binary operation find the precedence
 	while(true) {
 
 		if(currentToken->getType() == Token::DELIMETER) {
-			getNextToken(); // eat it
+			//getNextToken(); // eat it
 			return LHS;
 		} 
 
 		// TODO: ensure this gives something meaningful
+
 		Operator op = operatorLookup(currentToken->strData);
 		unsigned int prec = precedenceLookup(op);
 
@@ -320,8 +331,10 @@ Expression *AbstractSyntaxTree::parseBinaryOperationRHS(unsigned int minPrec, Ex
 
 		// current token is now either a delimeter or operator
 		if(currentToken->getType() == Token::OPERATOR) {
+
 			Operator op2 = operatorLookup(currentToken->strData);
 			unsigned int prec2 = precedenceLookup(op2);
+
 
 			if(prec2 > prec) {
 				RHS = parseBinaryOperationRHS(prec + 1, RHS);
@@ -395,7 +408,7 @@ Expression *AbstractSyntaxTree::parseVariableDeclaration() {
 			error(next, "Expected '=' or delimiter (';' or '\\n'), got");
 			return NULL;
 		}
-		return new VariableDeclaration(t, name);
+		return new VariableInitialisation(t, name);
 	}
 }
 
