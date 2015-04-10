@@ -1,6 +1,10 @@
-int fn | int arg | 
+int print | int a|
+	0
+end
 
 
-	call(3 + 3)
+int main ||
+	int a = 2
+	int b = a * 5 + print(a * 3)
 
 end

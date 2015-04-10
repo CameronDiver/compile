@@ -1,14 +1,9 @@
 int fn | int a, int b | 
 	int c = a+b
-	 
-	callthis()
-	print(a, b)
 
 end
 
-float floatFunction | float b |
+int main | int b |
 
-	print(fn(b, b))
-	print(3+3)
-
+	fn(5, b)
 end
