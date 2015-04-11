@@ -128,9 +128,10 @@ int main(int argc, char *argv[]) {
 	llvm::raw_os_ostream stream(file);
 	//llvm::WriteBitcodeToFile(Module, stream);
 	module->print(stream, NULL);
-	module->dump();
+	//module->dump();
 
-	std::cout << "return was: " << jit->callMain() << "\n";
+	int ret = jit->callMain();
+	std::cout << "return was: " << ret << "\n";
 
 	return EXIT_SUCCESS;
 }
