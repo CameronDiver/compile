@@ -10,7 +10,7 @@
 #include "ast.h"
 #include "codegen/codegen.h"
 
-llvm::Module *Module;
+llvm::Module *module;
 llvm::IRBuilder<> Builder(llvm::getGlobalContext());
 std::map<std::string, llvm::Value*> NamedValues;
 
@@ -118,15 +118,15 @@ int main(int argc, char *argv[]) {
 
 	// generate code
 	currentFn = NULL;
-	Module = new llvm::Module("compiler", llvm::getGlobalContext());
+	module = new llvm::Module("compiler", llvm::getGlobalContext());
 
 	CodeGen *code = new CodeGen(tree);
 
 	std::ofstream file("out.ll");
 	llvm::raw_os_ostream stream(file);
 	//llvm::WriteBitcodeToFile(Module, stream);
-	Module->print(stream, NULL);
-	Module->dump();
+	module->print(stream, NULL);
+	module->dump();
 
 	return EXIT_SUCCESS;
 }

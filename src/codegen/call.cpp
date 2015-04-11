@@ -5,7 +5,7 @@
 #include <sstream>
 
 llvm::Value *Call::codegen() {
-	llvm::Function *fn = Module->getFunction(symbol);
+	llvm::Function *fn = module->getFunction(symbol);
 	if(fn == NULL) {
 		std::cout << "Invalid function " << symbol << std::endl;
 		exit(-1);
