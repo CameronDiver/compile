@@ -223,6 +223,9 @@ Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 				case IF:
 					return parseIfStatement();
 				break;
+				case ELSE:
+					return NULL;
+				break;
 
 				default:
 					return NULL;
@@ -444,9 +447,12 @@ Expression *AbstractSyntaxTree::parseIfStatement() {
 	}
 
 	std::vector<Expression *> statements;
-	bool foundEnd = false;
+	std::vector<Expression *> elseStatements;
+
+	std::vector<Expression *> *currentList = &statements;
+	bool foundEnd = false, foundElse = false;
 	while(currentToken != NULL) {
-		//std::cout << "Current token type: " << currentToken->getType() << "\n";
+		// std::cout << "Current token type: " << currentToken->getType() << "\n";
 		if(currentToken->getType() == Token::DELIMETER) {
 			getNextToken();
 			continue;
@@ -458,14 +464,23 @@ Expression *AbstractSyntaxTree::parseIfStatement() {
 				getNextToken();
 				foundEnd = true;
 				break;
-			} 
+			} else if(k == ELSE) {
+				if(foundElse) {
+					error(currentToken, "Found second else parameter");
+					return NULL;
+				}
+				foundElse = true;
+
+				currentList = &elseStatements;
+				getNextToken();
+				continue;
+			}
 		}
 
 		Expression *st = parseExpression();
 		if(st == NULL) return NULL;
-		statements.push_back(st);
+		currentList->push_back(st);
 
-		getNextToken();
 	}
 
 	if(!foundEnd) {
@@ -473,7 +488,11 @@ Expression *AbstractSyntaxTree::parseIfStatement() {
 		return NULL;
 	}
 
-	return new IfStatement(predicate, statements);
+	if(elseStatements.size() == 0) {
+		return new IfStatement(predicate, statements);
+	} else {
+		return new IfStatement(predicate, statements, elseStatements);
+	}
 }
 
 void AbstractSyntaxTree::error(Token *t, std::string message) {
