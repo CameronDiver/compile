@@ -9,6 +9,7 @@
 #include "functiondef.h"
 #include "ast.h"
 #include "codegen/codegen.h"
+#include "jit.h"
 
 llvm::Module *module;
 llvm::IRBuilder<> Builder(llvm::getGlobalContext());
@@ -119,6 +120,7 @@ int main(int argc, char *argv[]) {
 	// generate code
 	currentFn = NULL;
 	module = new llvm::Module("compiler", llvm::getGlobalContext());
+	JITExecution *jit = new JITExecution();
 
 	CodeGen *code = new CodeGen(tree);
 
@@ -127,6 +129,8 @@ int main(int argc, char *argv[]) {
 	//llvm::WriteBitcodeToFile(Module, stream);
 	module->print(stream, NULL);
 	module->dump();
+
+	std::cout << "return was: " << jit->callMain() << "\n";
 
 	return EXIT_SUCCESS;
 }

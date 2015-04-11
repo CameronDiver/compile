@@ -4,7 +4,7 @@ CXX=clang++
 LLVM_CONFIG = llvm-config-3.5
 
 CXXFLAGS = -I`$(LLVM_CONFIG) --includedir --cxxflags` -Iast/ -I. -Wall -std=c++11 -DDEBUG -g
-LDFLAGS  = `$(LLVM_CONFIG) --ldflags --system-libs --libs core native bitwriter mcjit`
+LDFLAGS  = `$(LLVM_CONFIG) --ldflags --system-libs --libs core native bitwriter mcjit jit` -rdynamic
 
 CODEGEN_DIR=$(BUILD_DIR)/codegen
 
