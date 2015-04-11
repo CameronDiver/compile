@@ -29,7 +29,7 @@ enum Keyword {
 	END,
 	IF,
 	ELSE,
-	WHILE
+	WHILE,
 
 
 	NOT_KEYWORD
