@@ -33,6 +33,9 @@ void installTypes() {
 
 void installKeywords() {
 	keywords.insert(std::pair<std::string, Keyword>("end", END));
+	keywords.insert(std::pair<std::string, Keyword>("if", IF));
+	keywords.insert(std::pair<std::string, Keyword>("else", ELSE));
+	keywords.insert(std::pair<std::string, Keyword>("while", WHILE));
 }
 
 void installOperators() {

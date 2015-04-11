@@ -27,6 +27,9 @@ enum BuiltinType {
 
 enum Keyword {
 	END,
+	IF,
+	ELSE,
+	WHILE
 
 
 	NOT_KEYWORD
