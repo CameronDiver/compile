@@ -11,6 +11,9 @@ Value *WhileStatement::codegen() {
 	BasicBlock *loop = BasicBlock::Create(getGlobalContext(), "loopbody");
 	BasicBlock *afterLoop = BasicBlock::Create(getGlobalContext(), "loopafter");
 
+	// create a jump to the predicate
+	Builder.CreateBr(pred);
+
 	// need to create a conditional branch for the predicate
 	Builder.SetInsertPoint(pred);
 
