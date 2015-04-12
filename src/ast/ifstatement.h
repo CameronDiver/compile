@@ -19,7 +19,7 @@ public:
 	IfStatement(Expression *pred, std::vector<Expression *> _statements, std::vector<Expression *> _else)
 	: predicate(pred), statements(_statements), elseStatements(_else), hasElse(true) {}
 
-	llvm::Value *codegen(){std::cout << "From codegen in ifstatement\n";return NULL;}
+	llvm::Value *codegen();
 
 #if defined(DEBUG)
 	std::string prettyPrint() {
