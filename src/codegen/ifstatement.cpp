@@ -41,7 +41,7 @@ Value *IfStatement::codegen() {
 
 	Value *falseV = NULL;
 	for(unsigned i = 0; i < elseStatements.size(); ++i) {
-		falseV = statements[i]->codegen();
+		falseV = elseStatements[i]->codegen();
 	}
 
 	Builder.CreateBr(mergeBlock);
