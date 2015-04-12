@@ -30,6 +30,8 @@ int JITExecution::callMain() {
 		return -1;
 	}
 
+	//fn->viewCFG();
+
 	GenericValue g = executionEngine->runFunction(fn, noargs);
 	
 	int a = ~0;
