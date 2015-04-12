@@ -226,6 +226,9 @@ Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 				case ELSE:
 					return NULL;
 				break;
+				case WHILE:
+					return parseWhileStatement();
+				break;
 
 				default:
 					return NULL;
@@ -471,6 +474,7 @@ Expression *AbstractSyntaxTree::parseIfStatement() {
 				}
 				foundElse = true;
 
+				// start saving the statements to the else list now
 				currentList = &elseStatements;
 				getNextToken();
 				continue;
@@ -493,6 +497,52 @@ Expression *AbstractSyntaxTree::parseIfStatement() {
 	} else {
 		return new IfStatement(predicate, statements, elseStatements);
 	}
+}
+
+Expression *AbstractSyntaxTree::parseWhileStatement() {
+	// TODO: Check it's a while token
+	Token *whileTok = currentToken;
+	getNextToken();
+
+	Expression *predicate = parseExpression();
+	if(predicate == NULL){
+		std::cout << "NULL from here " << __FILE__ << ":" << __LINE__ << std::endl;
+		return NULL;
+	}
+
+	std::vector<Expression *> statements;
+	bool foundEnd = false;
+	while(currentToken != NULL) {
+		if(currentToken->getType() == Token::DELIMETER){
+			getNextToken();
+			continue;
+		}
+
+		if(currentToken->getType() == Token::KEYWORD) {
+			Keyword k = keywordLookup(currentToken->strData);
+
+			if(k == END) {
+				foundEnd = true;
+				getNextToken();
+				break;
+			} else {
+				std::cout << "NULL from here " << __FILE__ << ":" << __LINE__ << std::endl;
+				return NULL;
+			}
+			
+		}
+
+		Expression *e = parseExpression();
+		if(e == NULL) return NULL;
+		statements.push_back(e);
+	}
+
+	if(!foundEnd) {
+		error(whileTok, "Did not find end to while statement");
+		return NULL;
+	}
+
+	return new WhileStatement(predicate, statements);
 }
 
 void AbstractSyntaxTree::error(Token *t, std::string message) {

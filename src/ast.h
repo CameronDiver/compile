@@ -58,6 +58,7 @@ private:
 	Expression 			*parseIdentifierReference();
 	Expression 			*parseFunctionCall();
 	Expression 			*parseIfStatement();
+	Expression 			*parseWhileStatement();
 
 
 

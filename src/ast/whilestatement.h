@@ -18,7 +18,7 @@ public:
 
 	#if defined(DEBUG)
 	std::string prettyPrint() {
-		stringstream ss("");
+		std::stringstream ss("");
 		ss << "While loop, pred [ " << predicate->prettyPrint() << "]\n";
 		ss << "Statements:\n";
 		for(unsigned i = 0; i < statements.size(); ++i) {
