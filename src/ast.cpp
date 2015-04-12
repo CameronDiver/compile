@@ -213,11 +213,27 @@ Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 			return NULL;
 		break;
 		case Token::KEYWORD:
-			if(keywordLookup(currentToken->strData) == END)
-				return NULL;
+		{
+			Keyword k = keywordLookup(currentToken->strData);
+			
+			switch(k) {
+				case END:
+					return NULL;
+				break;
+				case IF:
+					return parseIfStatement();
+				break;
+				case ELSE:
+					return NULL;
+				break;
 
-		// leave off the break for this entry so anything else 
-		// will confuse it
+				default:
+					return NULL;
+				break;
+			}
+		}
+		break;
+
 		default:
 			error(currentToken, "Found unexpected token ");
 			return NULL;
@@ -409,6 +425,73 @@ Expression *AbstractSyntaxTree::parseVariableDeclaration() {
 			return NULL;
 		}
 		return new VariableInitialisation(t, name);
+	}
+}
+
+Expression *AbstractSyntaxTree::parseIfStatement() {
+	// TODO: Sanity check currentToken is definitely a if keyword
+	Token *ifTok = currentToken;
+	getNextToken();
+	Expression *predicate = parseExpression();
+	if(predicate == NULL) {
+		// either an end or an else keyword
+		Keyword k = keywordLookup(currentToken->strData);
+		if(k == END) {
+			//empty if, can ignore
+			#if defined(DEBUG)
+				std::cout << "Ignoring empty if statement: [" << currentToken->filename << ":" << currentToken->line << "]\n";
+			#endif
+		} else if(k == ELSE) {
+			std::cout << "Not implemented error: else in " <<__FILE__ << ":" << __LINE__ << std::endl;
+		}
+	}
+
+	std::vector<Expression *> statements;
+	std::vector<Expression *> elseStatements;
+
+	std::vector<Expression *> *currentList = &statements;
+	bool foundEnd = false, foundElse = false;
+	while(currentToken != NULL) {
+		// std::cout << "Current token type: " << currentToken->getType() << "\n";
+		if(currentToken->getType() == Token::DELIMETER) {
+			getNextToken();
+			continue;
+		}
+
+		if(currentToken->getType() == Token::KEYWORD) {
+			Keyword k = keywordLookup(currentToken->strData);
+			if(k == END) {
+				getNextToken();
+				foundEnd = true;
+				break;
+			} else if(k == ELSE) {
+				if(foundElse) {
+					error(currentToken, "Found second else parameter");
+					return NULL;
+				}
+				foundElse = true;
+
+				currentList = &elseStatements;
+				getNextToken();
+				continue;
+			}
+		}
+
+		Expression *st = parseExpression();
+		if(st == NULL) return NULL;
+		currentList->push_back(st);
+
+	}
+
+	if(!foundEnd) {
+		error(ifTok, "Did not find end to if statement");
+		return NULL;
+	}
+
+	if(elseStatements.size() == 0) {
+		return new IfStatement(predicate, statements);
+	} else {
+		return new IfStatement(predicate, statements, elseStatements);
 	}
 }
 
