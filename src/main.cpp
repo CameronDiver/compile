@@ -131,14 +131,16 @@ int main(int argc, char *argv[]) {
 	llvm::raw_os_ostream stream(file);
 	//llvm::WriteBitcodeToFile(Module, stream);
 	module->print(stream, NULL);
-	//module->dump();
+	module->dump();
 
 #if defined(DEBUG)
 	std::cout << "Caling main function:" 
 	<< "------------------------------------" << std::endl;
 #endif	
 	int ret = jit->callMain();
+#if defined(DEBUG)
 	std::cout << std::endl << "Returned value: " << ret << "\n";
+#endif
 
-	return EXIT_SUCCESS;
+	return ret;
 }
