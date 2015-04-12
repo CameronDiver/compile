@@ -14,7 +14,7 @@ public:
 	WhileStatement(Expression *pred, std::vector<Expression *> _statements)
 	: predicate(pred), statements(_statements){}
 
-	llvm::Value *codegen() { return NULL; }
+	llvm::Value *codegen();
 
 	#if defined(DEBUG)
 	std::string prettyPrint() {
