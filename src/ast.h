@@ -17,6 +17,7 @@
 #include "ast/functionbody.h"
 #include "ast/variableinit.h"
 #include "ast/ifstatement.h"
+#include "ast/whilestatement.h"
 
 // the current function
 extern FunctionDefinition *currentFn;
@@ -57,6 +58,7 @@ private:
 	Expression 			*parseIdentifierReference();
 	Expression 			*parseFunctionCall();
 	Expression 			*parseIfStatement();
+	Expression 			*parseWhileStatement();
 
 
 

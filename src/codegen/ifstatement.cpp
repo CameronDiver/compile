@@ -53,6 +53,9 @@ Value *IfStatement::codegen() {
 	// PHINode *phi = Builder.CreatePHI(CodeGen::getTypeFromBuiltin(INTEGER), 2, "iftmp");
 	// phi->addIncoming(trueV, trueBlock);
 	// phi->addIncoming(falseV, falseBlock);
+	
+	// add meaningless instruction which will be optomised out, but will
+	// ensure the mergeBlock is definitely created and added 
 	Value *v = Builder.CreateAdd(CodeGen::getInitialiser(INTEGER), CodeGen::getInitialiser(INTEGER), "ifdummyadd");
 	return v;
 }
