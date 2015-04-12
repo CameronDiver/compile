@@ -133,8 +133,12 @@ int main(int argc, char *argv[]) {
 	module->print(stream, NULL);
 	//module->dump();
 
+#if defined(DEBUG)
+	std::cout << "Caling main function:" 
+	<< "------------------------------------" << std::endl;
+#endif	
 	int ret = jit->callMain();
-	std::cout << "return was: " << ret << "\n";
+	std::cout << std::endl << "Returned value: " << ret << "\n";
 
 	return EXIT_SUCCESS;
 }
