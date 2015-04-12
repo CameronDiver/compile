@@ -1,7 +1,7 @@
 int main | |
-	
-	while 1
-		b = 1
-		int c = b + 1 * b
+	int a = 0
+	while a - 10
+		putchar(a + 46)
+		a = a + 1
 	end
 end
