@@ -2,7 +2,7 @@
 
 using namespace llvm;
 
-std::map<std::string, llvm::Value *> CodeGen::Symbols;
+std::map<std::string, Value *> CodeGen::Symbols;
 
 
 CodeGen::CodeGen(AbstractSyntaxTree *tree) {
