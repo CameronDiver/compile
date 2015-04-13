@@ -525,10 +525,7 @@ Expression *AbstractSyntaxTree::parseWhileStatement() {
 				foundEnd = true;
 				getNextToken();
 				break;
-			} else {
-				std::cout << "NULL from here " << __FILE__ << ":" << __LINE__ << std::endl;
-				return NULL;
-			}
+			} 
 			
 		}
 
