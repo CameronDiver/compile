@@ -1,19 +1,34 @@
 Short term
 --------------------------------------------------------------------
 
+add the backslash character to allow statements to span lines
+or maybe change the spec so that newlines arent counted as delimiters
+and make the condition code for control flow statements more intelligient
+
+comments
+
+extern
+
+scan all the code for functions before generating code, so that functions don't have to be forward declared
+
+better error reporting in codegen
+
+make integer division and float division different operators
+
 Support signed as well as unsigned integers
 
 support void, bool
 
 allow pointer types
 
+allow unary operators
+
+add for and foreach
+
 change all binary operation code to take notice of the input types
 
 arrays
 
-extern
-
-better error reporting in codegen
 
 Long Term
 ---------------------------------------------------------------------
@@ -21,3 +36,10 @@ structs
 anonymous functions
 classes
 inheritance
+
+
+building out.ll file
+---------------------------------------------------------------------
+llc(-3.5) -o out.s out.ll
+clang -lc -o out out.s
+or gcc also works
