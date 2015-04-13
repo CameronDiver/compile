@@ -9,8 +9,9 @@
 #include "functiondef.h"
 #include "ast.h"
 #include "codegen/codegen.h"
+#include "jit.h"
 
-llvm::Module *Module;
+llvm::Module *module;
 llvm::IRBuilder<> Builder(llvm::getGlobalContext());
 std::map<std::string, llvm::Value*> NamedValues;
 
@@ -140,15 +141,25 @@ int main(int argc, char *argv[]) {
 
 	// generate code
 	currentFn = NULL;
-	Module = new llvm::Module("compiler", llvm::getGlobalContext());
+	module = new llvm::Module("compiler", llvm::getGlobalContext());
+	JITExecution *jit = new JITExecution();
 
 	CodeGen *code = new CodeGen(tree);
 
 	std::ofstream file("out.ll");
 	llvm::raw_os_ostream stream(file);
 	//llvm::WriteBitcodeToFile(Module, stream);
-	Module->print(stream, NULL);
-	Module->dump();
+	module->print(stream, NULL);
+	module->dump();
 
-	return EXIT_SUCCESS;
+#if defined(DEBUG)
+	std::cout << "Caling main function:" 
+	<< "------------------------------------" << std::endl;
+#endif	
+	int ret = jit->callMain();
+#if defined(DEBUG)
+	std::cout << std::endl << "Returned value: " << ret << "\n";
+#endif
+
+	return ret;
 }

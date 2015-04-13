@@ -12,7 +12,7 @@
 #include "llvm/IR/Module.h"
 #include <string>
 
-extern llvm::Module *Module;
+extern llvm::Module *module;
 extern llvm::IRBuilder<> Builder;
 extern std::map<std::string, llvm::Value*> NamedValues;
 

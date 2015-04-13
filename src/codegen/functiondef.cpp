@@ -18,14 +18,14 @@ llvm::Function *FunctionDefinition::codegen() {
 
 	llvm::Function *fn = 
 	llvm::Function::Create(fnType, 
-		llvm::Function::ExternalLinkage, fname, Module);
+		llvm::Function::ExternalLinkage, fname, module);
 	// TODO: check that this succeeded then add information into
 	// the symbols array
 
 	// check that there isn't already a function with the same name
 	if(fn->getName() != fname) {
 		fn->eraseFromParent();
-		fn = Module->getFunction(fname);
+		fn = module->getFunction(fname);
 
 		// check if the function has a body, if so
 		// this is a redclecaration
