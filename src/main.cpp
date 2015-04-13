@@ -39,11 +39,30 @@ void installKeywords() {
 }
 
 void installOperators() {
-	operators.insert(std::pair<std::string, Operator>("+", PLUS));
-	operators.insert(std::pair<std::string, Operator>("-", MINUS));
-	operators.insert(std::pair<std::string, Operator>("*", MULT));
-	operators.insert(std::pair<std::string, Operator>("/", DIV));
-	operators.insert(std::pair<std::string, Operator>("=", EQUALS));
+	operators["+"] = PLUS;
+	operators["-"] = MINUS;
+	operators["*"] = MULT;
+	operators["/"] = DIV;
+	operators["="] = EQUALS;
+
+	operators["<"] = LESSTHAN;
+	operators[">"] = GREATTHAN;
+
+	operators["!="] = NOTEQUALS;
+	operators["%"] = MOD;
+	operators["<="] = LESSTHANEQ;
+	operators[">="] = GREATTHANEQ;
+
+	operators["=="] = COMPARISON;
+
+	operators["+="] = PLUSEQ;
+	operators["-="] = MINUSEQ;
+	operators["*="] = MULTEQ;
+	operators["/="] = DIVEQ;
+
+	operators["&"] = BITWISEAND;
+	operators["&&"] = LOGICALAND;
+ 
 }
 
 void installPrecedence() {
