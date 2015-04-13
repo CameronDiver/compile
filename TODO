@@ -1,3 +1,23 @@
-For function stack variables each function needs to store a list of it's
-stack allocations, and this needs to be a different array to the function name
-one, which is currently called NamedValues
+Short term
+--------------------------------------------------------------------
+
+Support signed as well as unsigned integers
+
+support void, bool
+
+allow pointer types
+
+change all binary operation code to take notice of the input types
+
+arrays
+
+extern
+
+better error reporting in codegen
+
+Long Term
+---------------------------------------------------------------------
+structs
+anonymous functions
+classes
+inheritance
