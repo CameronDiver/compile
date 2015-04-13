@@ -55,6 +55,7 @@ public:
 
 private:
 	Type getTypeFromString(std::string data);
+	static bool isOperatorChar(char c);
 
 
 };

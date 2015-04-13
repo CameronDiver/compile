@@ -62,65 +62,110 @@ static inline void addIfNotEmpty(std::vector<Token> &tokens, std::stringstream &
 }
 
 bool Token::tokenize(std::vector<Token> &tokens) {
-	char c, lastC = '\0';
+	//char c, lastC = '\0';
+	char c = '\0', nextC = getSourceChar();
 	int line = 1;
 	std::stringstream ss;
-	while((c = getSourceChar()) != EOF) {
-		
-		switch(c) {
-			case '\n':
-				addIfNotEmpty(tokens, ss, line);
-				// make it clear the delimiter was the newline
-				ss << "\\n";
-				addIfNotEmpty(tokens, ss, line);
-				++line;
-			break;	
+	while(nextC != EOF) {
+		c = nextC;
+		nextC = getSourceChar();
 
-			break;
-			case ' ':
-			case '\t':
-			case '\r':
-				addIfNotEmpty(tokens, ss, line);
-			break;
 
-			case ',':
-			case '|':
-			case '(':
-			case ')':
-			case ';':
-				//FIXME: Make another helper function which allows sending what type of
-				//token this is to avoid having to re-work it out
-				addIfNotEmpty(tokens, ss, line);
+		if(c == '\n') {
+			addIfNotEmpty(tokens, ss, line);
+			ss << "\\n";
+			addIfNotEmpty(tokens, ss, line);
+			++line;
+		} else if(c == ' ' || c == '\t' || c == '\r') {
+			addIfNotEmpty(tokens, ss, line);
+		} else if(c == ',' || c == '|' || c == '(' || c == ')' || c == ';') {
+			addIfNotEmpty(tokens, ss, line);
 
+			ss << c;
+
+			addIfNotEmpty(tokens, ss, line);
+		} else if(isOperatorChar(c)) {
+			// check nextC to see if it is a double char operator
+			if(isOperatorChar(nextC)) {
+				// this will be checked to be an actual operator
+				// in get type code in this class
+				addIfNotEmpty(tokens, ss, line);
+				ss << c << nextC;
+				addIfNotEmpty;
+				nextC = getSourceChar();
+			} else {
+				addIfNotEmpty(tokens, ss, line);
 				ss << c;
-
 				addIfNotEmpty(tokens, ss, line);
-			break;
-
-			// check if it is an operator
-			// TODO: a nicer way than hardcoding them in
-			case '+':
-			case '-':
-			case '*':
-			case '/':
-			case '=':
-				addIfNotEmpty(tokens, ss, line);
-
-				ss << c;
-
-				addIfNotEmpty(tokens, ss, line);
-			break;
-
-			default:
-				ss << c;
-			break;
+			}
+		} else {
+			ss << c;
 		}
-
-		lastC = c;
 	}
+
+	// 	switch(c) {
+	// 		case '\n':
+	// 			addIfNotEmpty(tokens, ss, line);
+	// 			// make it clear the delimiter was the newline
+	// 			ss << "\\n";
+	// 			addIfNotEmpty(tokens, ss, line);
+	// 			++line;
+	// 		break;	
+
+	// 		break;
+	// 		case ' ':
+	// 		case '\t':
+	// 		case '\r':
+	// 			addIfNotEmpty(tokens, ss, line);
+	// 		break;
+
+	// 		case ',':
+	// 		case '|':
+	// 		case '(':
+	// 		case ')':
+	// 		case ';':
+	// 			//FIXME: Make another helper function which allows sending what type of
+	// 			//token this is to avoid having to re-work it out
+	// 			addIfNotEmpty(tokens, ss, line);
+
+	// 			ss << c;
+
+	// 			addIfNotEmpty(tokens, ss, line);
+	// 		break;
+
+	// 		// check if it is an operator
+	// 		// TODO: a nicer way than hardcoding them in
+	// 		case '+':
+	// 		case '-':
+	// 		case '*':
+	// 		case '/':
+	// 		case '=':
+	// 		case '<':
+	// 		case '>':
+	// 		case '!':
+
+	// 			addIfNotEmpty(tokens, ss, line);
+
+	// 			ss << c;
+
+	// 			addIfNotEmpty(tokens, ss, line);
+	// 		break;
+
+	// 		default:
+	// 			ss << c;
+	// 		break;
+	// 	}
+
+	// 	lastC = c;
+	// }
 
 	addIfNotEmpty(tokens, ss, line);
 	return true;
+}
+
+bool Token::isOperatorChar(char c) {
+	return c == '+' || c == '-' || c == '*' || c == '/' ||
+		c == '=' || c == '<' || c == '>' || c == '!' || c == '%';
 }
 
 std::ostream& operator<<(std::ostream& out, const Token::Type t) {
