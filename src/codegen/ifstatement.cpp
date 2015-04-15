@@ -49,13 +49,6 @@ Value *IfStatement::codegen() {
 
 	fn->getBasicBlockList().push_back(mergeBlock);
 	Builder.SetInsertPoint(mergeBlock);
-
-	// PHINode *phi = Builder.CreatePHI(CodeGen::getTypeFromBuiltin(INTEGER), 2, "iftmp");
-	// phi->addIncoming(trueV, trueBlock);
-	// phi->addIncoming(falseV, falseBlock);
-	
-	// add meaningless instruction which will be optomised out, but will
-	// ensure the mergeBlock is definitely created and added 
 	
 	return CodeGen::createNoOp();
 }
