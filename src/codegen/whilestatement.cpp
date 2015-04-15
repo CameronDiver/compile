@@ -22,7 +22,7 @@ Value *WhileStatement::codegen() {
 
 	// create the condition
 	Value *condition = Builder.CreateICmpNE(predValue, 
-		ConstantInt::get(CodeGen::getTypeFromBuiltin(INTEGER), 0),
+		ConstantInt::getFalse(Type::getInt1Ty(getGlobalContext())),
 		"whilecond");
 
 	// create the branching condition
@@ -43,5 +43,5 @@ Value *WhileStatement::codegen() {
 	fn->getBasicBlockList().push_back(afterLoop);
 	Builder.SetInsertPoint(afterLoop);
 
-	return Builder.CreateAdd(CodeGen::getInitialiser(INTEGER), CodeGen::getInitialiser(INTEGER), "whiledummyadd");
+	return CodeGen::createNoOp();
 }

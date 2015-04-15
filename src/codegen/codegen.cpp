@@ -51,3 +51,7 @@ AllocaInst *CodeGen::createEntryBlockAlloca(Function *fn, const std::string name
 
 	return tempBuilder.CreateAlloca(getTypeFromBuiltin(t), 0, name);
 }
+
+Value *CodeGen::createNoOp() {
+	return Builder.CreateBitCast(getInitialiser(INTEGER), getTypeFromBuiltin(INTEGER), "NoOp");
+}

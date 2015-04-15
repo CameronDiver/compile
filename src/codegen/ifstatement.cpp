@@ -11,7 +11,7 @@ Value *IfStatement::codegen() {
 	if(condition == NULL) return NULL;
 
 	condition = Builder.CreateICmpNE(condition, 
-		ConstantInt::get(CodeGen::getTypeFromBuiltin(INTEGER), 0), "ifcond");
+		ConstantInt::getFalse(Type::getInt1Ty(getGlobalContext())), "ifcond");
 
 
 	Function *fn = Builder.GetInsertBlock()->getParent();
@@ -56,6 +56,6 @@ Value *IfStatement::codegen() {
 	
 	// add meaningless instruction which will be optomised out, but will
 	// ensure the mergeBlock is definitely created and added 
-	Value *v = Builder.CreateAdd(CodeGen::getInitialiser(INTEGER), CodeGen::getInitialiser(INTEGER), "ifdummyadd");
-	return v;
+	
+	return CodeGen::createNoOp();
 }

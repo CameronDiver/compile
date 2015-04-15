@@ -21,6 +21,7 @@ public:
 		createEntryBlockAlloca(llvm::Function *fn, const std::string name, BuiltinType t);
 
 	static llvm::Value *getInitialiser(BuiltinType t);
+	static llvm::Value *createNoOp();
 
 
 	CodeGen(AbstractSyntaxTree *tree);
