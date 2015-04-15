@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
 	std::cout << "Caling main function:" 
 	<< "------------------------------------" << std::endl;
 #endif	
-	int ret = jit->callMain();
+	int ret = 	jit->callMain();
 #if defined(DEBUG)
 	std::cout << std::endl << "Returned value: " << ret << "\n";
 #endif

@@ -91,7 +91,7 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 				// in get type code in this class
 				addIfNotEmpty(tokens, ss, line);
 				ss << c << nextC;
-				addIfNotEmpty;
+				addIfNotEmpty(tokens, ss, line);
 				nextC = getSourceChar();
 			} else {
 				addIfNotEmpty(tokens, ss, line);
@@ -165,7 +165,8 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 
 bool Token::isOperatorChar(char c) {
 	return c == '+' || c == '-' || c == '*' || c == '/' ||
-		c == '=' || c == '<' || c == '>' || c == '!' || c == '%';
+		c == '=' || c == '<' || c == '>' || c == '!' || c == '%'
+		|| c == '&';
 }
 
 std::ostream& operator<<(std::ostream& out, const Token::Type t) {
