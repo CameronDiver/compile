@@ -17,8 +17,7 @@ public:
 	BinaryOperation(Expression *lhs, Operator _op, Expression *rhs) : LHS(lhs), RHS(rhs), op(_op) {}
 
 	llvm::Value *codegen();
-
-	// TODO: make a static helper function which grabs the Operator enum value from the string of the operator
+	
 
 #if defined(DEBUG)
 	std::string prettyPrint() {
@@ -27,6 +26,10 @@ public:
 		return ss.str();
 	}
 #endif
+
+ private:
+ 	bool isAssigmentOperation();
+ 	llvm::Value *assigmentCodegen();
 };
 
 
