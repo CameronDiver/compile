@@ -14,10 +14,10 @@ Value *FunctionBody::codegen() {
 		} else {
 			Value *val = statements[i]->codegen();
 
-			if(val == NULL) {
+			/*if(val == NULL) {
 				std::cout << "An error occured" << std::endl;
 				exit(-1);
-			}
+			}*/
 			last = val;
 		}
 	}
