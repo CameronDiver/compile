@@ -5,8 +5,6 @@ add the backslash character to allow statements to span lines
 or maybe change the spec so that newlines arent counted as delimiters
 and make the condition code for control flow statements more intelligient
 
-comments
-
 extern
 
 scan all the code for functions before generating code, so that functions don't have to be forward declared
