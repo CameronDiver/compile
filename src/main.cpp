@@ -29,7 +29,16 @@ static std::string filename;
 
 void installTypes() {
 	types.insert(std::pair<std::string, BuiltinType>("int", INTEGER));
+	types.insert(std::pair<std::string, BuiltinType>("uint", UNSIGNED));
+	types.insert(std::pair<std::string, BuiltinType>("int32", INTEGER));
+	types.insert(std::pair<std::string, BuiltinType>("uint32", UNSIGNED));
 	types.insert(std::pair<std::string, BuiltinType>("float", FLOAT));
+	types.insert(std::pair<std::string, BuiltinType>("double", DOUBLE));
+	types.insert(std::pair<std::string, BuiltinType>("int64", LONG_INTEGER));
+	types.insert(std::pair<std::string, BuiltinType>("uint64", LONG_UNSIGNED));
+	types.insert(std::pair<std::string, BuiltinType>("bool", BOOLEAN));
+
+
 }
 
 void installKeywords() {

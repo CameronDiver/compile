@@ -17,8 +17,14 @@ extern llvm::IRBuilder<> Builder;
 extern std::map<std::string, llvm::Value*> NamedValues;
 
 enum BuiltinType {
-	INTEGER, 	// 32 bit integer
-	FLOAT,		// 32 bit float
+	INTEGER, 		// 32 bit signed int
+	UNSIGNED,		// 32 bit unsigned
+	FLOAT,			// single precision float
+	DOUBLE,			// double precision float
+	LONG_INTEGER,	// 64 bit signed int
+	LONG_UNSIGNED,	// 64 bit unsigned int
+	BOOLEAN,		// 1bit int
+	POINTER,		// system word size
 
 
 	TYPE_UNKNOWN
