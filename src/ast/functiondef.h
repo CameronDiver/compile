@@ -21,7 +21,11 @@ public:
 	FunctionBody *body;
 
 	FunctionDefinition(BuiltinType t, std::string symbolName, std::vector<ArgPair> args, FunctionBody *fbody)
-		: type(t), fname(symbolName), arguments(args), body(fbody) { prettyPrint(); }
+		: type(t), fname(symbolName), arguments(args), body(fbody) {
+#if defined(DEBUG)
+		 prettyPrint(); 
+#endif
+		}
 
 	llvm::Function *codegen();
 	void allocateArgVars(llvm::Function *fn);
