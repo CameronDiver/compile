@@ -66,9 +66,18 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 	char c = '\0', nextC = getSourceChar();
 	int line = 1;
 	std::stringstream ss;
+
+	bool comment = false;
+
 	while(nextC != EOF) {
 		c = nextC;
 		nextC = getSourceChar();
+
+		if(comment) {
+			if(c == '\n') {
+				comment = false;
+			} else continue;
+		}
 
 
 		if(c == '\n') {
@@ -98,66 +107,14 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 				ss << c;
 				addIfNotEmpty(tokens, ss, line);
 			}
+		} else if(c == '#') {
+			// TODO: check not in string etc
+			std::cout << "Started a comment" << std::endl;
+			comment = true;
 		} else {
 			ss << c;
 		}
 	}
-
-	// 	switch(c) {
-	// 		case '\n':
-	// 			addIfNotEmpty(tokens, ss, line);
-	// 			// make it clear the delimiter was the newline
-	// 			ss << "\\n";
-	// 			addIfNotEmpty(tokens, ss, line);
-	// 			++line;
-	// 		break;	
-
-	// 		break;
-	// 		case ' ':
-	// 		case '\t':
-	// 		case '\r':
-	// 			addIfNotEmpty(tokens, ss, line);
-	// 		break;
-
-	// 		case ',':
-	// 		case '|':
-	// 		case '(':
-	// 		case ')':
-	// 		case ';':
-	// 			//FIXME: Make another helper function which allows sending what type of
-	// 			//token this is to avoid having to re-work it out
-	// 			addIfNotEmpty(tokens, ss, line);
-
-	// 			ss << c;
-
-	// 			addIfNotEmpty(tokens, ss, line);
-	// 		break;
-
-	// 		// check if it is an operator
-	// 		// TODO: a nicer way than hardcoding them in
-	// 		case '+':
-	// 		case '-':
-	// 		case '*':
-	// 		case '/':
-	// 		case '=':
-	// 		case '<':
-	// 		case '>':
-	// 		case '!':
-
-	// 			addIfNotEmpty(tokens, ss, line);
-
-	// 			ss << c;
-
-	// 			addIfNotEmpty(tokens, ss, line);
-	// 		break;
-
-	// 		default:
-	// 			ss << c;
-	// 		break;
-	// 	}
-
-	// 	lastC = c;
-	// }
 
 	addIfNotEmpty(tokens, ss, line);
 	return true;
