@@ -10,8 +10,6 @@
 #include "expression.h"
 #include "functionbody.h"
 
-typedef std::pair<BuiltinType, std::string> ArgPair;
-
 class FunctionDefinition { // TODO: extend something like 'RootStatement'
 public:
 	BuiltinType type;

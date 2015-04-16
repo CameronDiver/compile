@@ -103,6 +103,9 @@ std::string &trim(std::string &s);
 std::ostream& operator<<(std::ostream &out, const BuiltinType type);
 
 
+// helper type
+typedef std::pair<BuiltinType, std::string> ArgPair;
+
 
 
 #endif // BUILTINS_H
