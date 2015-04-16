@@ -18,7 +18,7 @@ JITExecution::JITExecution() {
 	std::vector<Type *> args(1, CodeGen::getTypeFromBuiltin(INTEGER));
 	FunctionType *fnType = FunctionType::get(CodeGen::getTypeFromBuiltin(INTEGER), args, false);
 
-	Function::Create(fnType, Function::ExternalLinkage, "putchar", module);
+	//Function::Create(fnType, Function::ExternalLinkage, "putchar", module);
 
 }
 

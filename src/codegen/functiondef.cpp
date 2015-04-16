@@ -49,6 +49,9 @@ llvm::Function *FunctionDefinition::codegen() {
 		i->setName(arguments[idx].second);
 	}
 
+
+	if(body == NULL) return fn;
+
 	// create a new basic block for entering the function
 	llvm::BasicBlock *basicBlock = llvm::BasicBlock::Create(llvm::getGlobalContext(), "entry", fn);
 	Builder.SetInsertPoint(basicBlock);

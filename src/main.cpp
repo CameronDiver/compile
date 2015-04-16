@@ -37,6 +37,8 @@ void installKeywords() {
 	keywords.insert(std::pair<std::string, Keyword>("if", IF));
 	keywords.insert(std::pair<std::string, Keyword>("else", ELSE));
 	keywords.insert(std::pair<std::string, Keyword>("while", WHILE));
+	keywords.insert(std::pair<std::string, Keyword>("extern", EXTERN));
+
 }
 
 void installOperators() {
@@ -83,6 +85,7 @@ BuiltinType typeLookup(std::string name) {
 }
 
 Keyword keywordLookup(std::string name) {
+	// TODO: downcase the input
 	if(keywords.find(name) == keywords.end())
 		return NOT_KEYWORD;
 	else

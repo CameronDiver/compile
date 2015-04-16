@@ -25,6 +25,9 @@ public:
 #endif
 		}
 
+	FunctionDefinition(BuiltinType t, std::string name, std::vector<ArgPair> args)
+	: type(t), fname(name), arguments(args), body(NULL) {}
+
 	llvm::Function *codegen();
 	void allocateArgVars(llvm::Function *fn);
 
@@ -32,7 +35,8 @@ public:
 	std::string prettyPrint() {
 		std::stringstream ss;
 		ss << "Function definition: Type:" << type << ", "  << fname << " [" << arguments.size() << " args]";
-		ss << body->prettyPrint();
+		if(body != NULL)
+			ss << body->prettyPrint();
 		return ss.str(); 
 	}
 #endif 

@@ -32,6 +32,9 @@ enum Keyword {
 	WHILE,
 
 
+	EXTERN,
+
+
 	NOT_KEYWORD
 };
 

@@ -52,6 +52,11 @@ Token *AbstractSyntaxTree::peekNextToken() {
 FunctionDefinition *AbstractSyntaxTree::parseTopLevel() {
 	// first token should be a typename
 	if(currentToken == NULL) return NULL;
+
+	 // if it is an external function declaration
+	if(currentToken->getType() == Token::KEYWORD && keywordLookup(currentToken->strData) == EXTERN) {
+		return parseExtern();
+	}
 	if(currentToken->getType() != Token::TYPE_NAME) {
 		// error = "Unknown typename"
 		error(currentToken, "Unknown type name");
@@ -125,6 +130,88 @@ FunctionDefinition *AbstractSyntaxTree::parseTopLevel() {
 		return new FunctionDefinition(fnType, name->strData, args, body);
 	else
 		return NULL;
+}
+
+FunctionDefinition *AbstractSyntaxTree::parseExtern() {
+	// TODO: Check current token is definitely an extern token
+	getNextToken();
+	if(currentToken == NULL) return NULL;
+	
+	if(currentToken->getType() != Token::TYPE_NAME) {
+		error(currentToken, "Expected typename after extern declaration, got ");
+		return NULL;
+	}
+
+	// TODO: check that the lookup succeeded
+	BuiltinType fntype = typeLookup(currentToken->strData);
+
+	// get the function name
+	getNextToken();
+	if(currentToken == NULL) return NULL;
+
+	if(currentToken->getType() != Token::SYMBOL) {
+		error(currentToken, "Expected valid function name for extern declaration, got ");
+		return NULL;
+	}
+
+	std::string name(currentToken->strData);
+
+	std::vector<ArgPair> arguments;
+
+	getNextToken();
+	// TODO: Allow newlines in function definitions
+	// ensure this is a arglist starting token
+	if(currentToken==NULL) return NULL;
+	if(currentToken->getType() != Token::ARG_LIST_CONTAINER) {
+		error(currentToken, "Expected argument list starting token ('|'), got ");
+		return NULL;
+	}
+
+	bool foundEnd = false;
+	getNextToken();
+	while(currentToken != NULL) {
+		if(currentToken->getType() == Token::TYPE_NAME) {
+			// get the type 
+			BuiltinType t = typeLookup(currentToken->strData);
+
+			// now it needs to be a symbol
+			getNextToken();
+			if(currentToken == NULL) return NULL;
+
+			if(currentToken->getType() != Token::SYMBOL) {
+				error(currentToken, "Expected valid identifier, got ");
+				return NULL;
+			}
+
+			std::string name = currentToken->strData;
+
+			getNextToken();
+			if(currentToken == NULL) return NULL;
+			if(currentToken->getType() == Token::ARG_LIST_CONTAINER) {
+				ArgPair pair(t, name);
+				arguments.push_back(pair);
+				foundEnd = true;
+				break;
+			} else if(currentToken->getType() == Token::SEPERATOR) {
+				ArgPair pair(t, name);
+				arguments.push_back(pair);
+			}
+
+		} else if(currentToken->getType() == Token::ARG_LIST_CONTAINER) {
+			foundEnd = true;
+			break;
+		} else {
+			error(currentToken, "Unexpected token in extern declaration argument list ");
+			return NULL;
+		}
+	}
+
+	if(!foundEnd) {
+		error(currentToken, "Could not find end to extern declaration ");
+		return NULL;
+	} else getNextToken();
+
+	return new FunctionDefinition(fntype, name, arguments);
 }
 
 FunctionBody *AbstractSyntaxTree::parseFunctionBody() {

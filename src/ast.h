@@ -41,6 +41,7 @@ private:
 	// For the time being the only thing that can appear in the root
 	// of the programs are function definitions
 	FunctionDefinition 	*parseTopLevel();
+	FunctionDefinition	*parseExtern();
 	FunctionBody 		*parseFunctionBody();
 
 
@@ -59,6 +60,7 @@ private:
 	Expression 			*parseFunctionCall();
 	Expression 			*parseIfStatement();
 	Expression 			*parseWhileStatement();
+
 
 
 
