@@ -109,7 +109,6 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 			}
 		} else if(c == '#') {
 			// TODO: check not in string etc
-			std::cout << "Started a comment" << std::endl;
 			comment = true;
 		} else {
 			ss << c;
