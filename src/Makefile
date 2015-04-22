@@ -15,6 +15,7 @@ OBJS = ast.o builtins.o main.o token.o jit.o
 
 SUBLIBS = types/types.a codegen/codegen.a
 SUBLIBS_MAKE = types codegen
+SUBLIBS_DEPENDS = */*.h */*.cpp
 
 GLOBAL_DEPENDS = ast/*.h builtins.h
 EXE = compile
@@ -22,8 +23,7 @@ EXE = compile
 ALL: $(EXE)
 
 
-$(EXE): $(OBJS)
-	$(foreach target, $(SUBLIBS_MAKE), cd $(target) && $(MAKE) CXXFLAGS="$(CXXFLAGSPRE)" CXX="$(CXX)" LLVMCXXFLAGS="$(LLVMCXX)" && cd ..;)
+$(EXE): $(OBJS) $(SUBLIBS)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(SUBLIBS) $(LDFLAGS) -o $(EXE)
 
 
@@ -32,6 +32,9 @@ $(EXE): $(OBJS)
 
 %.o: %.cpp $(GLOBAL_DEPENDS)
 	$(CXX) -c $(CXXFLAGS) -o $@ $<
+
+%.a: $(wildcard $(dir $@)/*.cpp) $(wildcard $(dir $@)/*.h) $(GLOBAL_DEPENDS)
+	cd $(@D) && $(MAKE) CXXFLAGS="$(CXXFLAGSPRE)" CXX="$(CXX)" LLVMCXXFLAGS="$(LLVMCXX)"
 
 clean:
 	$(foreach target, $(SUBLIBS_MAKE), cd $(target) && $(MAKE) clean && cd ..;)

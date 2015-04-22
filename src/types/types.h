@@ -10,7 +10,7 @@ class LanguageType {
  	LanguageType(BuiltinType t) 
  	: BaseType(t) {}
 
- 	virtual llvm::Type *getType();
+ 	virtual llvm::Type *getType()=0;
 };
 
 #endif 
