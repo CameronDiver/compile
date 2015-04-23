@@ -23,7 +23,7 @@ EXE = compile
 ALL: $(EXE)
 
 
-$(EXE): $(OBJS) $(SUBLIBS)
+$(EXE): $(SUBLIBS) $(OBJS) 
 	$(CXX) $(CXXFLAGS) $(OBJS) $(SUBLIBS) $(LDFLAGS) -o $(EXE)
 
 
@@ -33,9 +33,14 @@ $(EXE): $(OBJS) $(SUBLIBS)
 %.o: %.cpp $(GLOBAL_DEPENDS)
 	$(CXX) -c $(CXXFLAGS) -o $@ $<
 
-%.a: $(wildcard $(dir $@)/*.cpp) $(wildcard $(dir $@)/*.h) $(GLOBAL_DEPENDS)
-	cd $(@D) && $(MAKE) CXXFLAGS="$(CXXFLAGSPRE)" CXX="$(CXX)" LLVMCXXFLAGS="$(LLVMCXX)"
+%.a: force_look
+	@#echo $(wildcard $(dir $@)*.cpp) $(wildcard $(dir $@)*.h)
+	@#echo $(dir $@)*.cpp $(dir $@)*.h
+	cd $(dir $@) && $(MAKE) CXXFLAGS="$(CXXFLAGSPRE)" CXX="$(CXX)" LLVMCXXFLAGS="$(LLVMCXX)"
 
 clean:
 	$(foreach target, $(SUBLIBS_MAKE), cd $(target) && $(MAKE) clean && cd ..;)
 	rm $(OBJS)
+
+force_look:
+	true
