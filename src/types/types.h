@@ -61,7 +61,7 @@ class LanguageType {
 
  	// returns true if the langauge type is an integer
  	// type or false otherwise
- 	static bool isIntegerType(const class LanguageType *type) {
+ 	static bool isIntegerType(const LanguageType *type) {
  		switch(type->baseType) {
  			case INTEGER:
  			case UNSIGNED:
@@ -74,6 +74,11 @@ class LanguageType {
  			break;
  		}
  	}
+
+ 	template <class DstType>
+	static bool isType(const LanguageType* src) {
+	  return dynamic_cast<const DstType*>(src) != NULL;
+	}
 };
 
 #endif 
