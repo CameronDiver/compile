@@ -274,8 +274,6 @@ FunctionBody *AbstractSyntaxTree::parseFunctionBody() {
 
 Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 	
-	// std::cout << "parsePrimaryExpression: " << currentToken->getType()
-	// 	<< " - " << currentToken->strData << std::endl;
 	if(currentToken == NULL) return NULL;
 
 	switch(currentToken->getType()) {
@@ -295,6 +293,18 @@ Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 		case Token::SYMBOL:
 			return parseIdentifierReference();
 		break;
+		// The '-' is both a unary and binary operator but it is not
+		// defined as such to make the parsing simpler. That means
+		// that the '-' operator could turn up here and so handle this
+		// differently to the other operators.
+		case Token::OPERATOR:
+			if(operatorLookup(currentToken->strData) != MINUS) {
+				error(currentToken, "Unexpected operator, expected unary operator or primary expression, got ");
+				return NULL;
+			}
+			return parseUnaryOperation();
+		break;
+
 		case Token::DELIMETER:
 			getNextToken();
 			return NULL;
@@ -332,7 +342,7 @@ Expression *AbstractSyntaxTree::parsePrimaryExpression() {
 }
 
 Expression *AbstractSyntaxTree::parseExpression() {
-	Expression *LHS = parsePrimaryExpression();
+	Expression *LHS = parseUnaryOperation();
 
 	if(LHS == NULL) {
 		if(currentToken->getType() == Token::DELIMETER) {
@@ -407,7 +417,8 @@ Expression *AbstractSyntaxTree::parseBinaryOperationRHS(unsigned int minPrec, Ex
 	// if it's a closing bracket return
 	if(currentToken->getType() == Token::CLOSE_PAREN) return LHS;
 
-	//if(currentToken->getType() != Token::OPERATOR) return LHS;
+	if(unaryOperatorLookup(currentToken->strData) != NOT_UNARY)
+		return parseUnaryOperation();
 
 	// if it is a binary operation find the precedence
 	while(true) {
@@ -426,7 +437,7 @@ Expression *AbstractSyntaxTree::parseBinaryOperationRHS(unsigned int minPrec, Ex
 
 		getNextToken(); // eat operator
 
-		Expression *RHS = parsePrimaryExpression();
+		Expression *RHS = parseUnaryOperation();
 		if(RHS == NULL) { 
 			if(currentToken->getType() == Token::DELIMETER) {
 				getNextToken();
@@ -628,6 +639,20 @@ Expression *AbstractSyntaxTree::parseWhileStatement() {
 
 	return new WhileStatement(predicate, statements);
 }
+
+Expression *AbstractSyntaxTree::parseUnaryOperation() {
+	UnaryOperator op;
+	if((op = unaryOperatorLookup(currentToken->strData)) == NOT_UNARY)
+		// must be a primary expression
+		return parsePrimaryExpression();
+
+	getNextToken();
+	if(Expression *operand = parseUnaryOperation())
+		return new UnaryOperation(op, operand);
+	return NULL;
+
+}
+
 
 void AbstractSyntaxTree::error(Token *t, std::string message) {
 	std::cout << "Error: " << message << " `" << t->strData

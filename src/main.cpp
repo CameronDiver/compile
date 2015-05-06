@@ -23,6 +23,7 @@ static std::map<std::string, BuiltinType> 	types;
 static std::map<std::string, Keyword>		keywords;
 static std::map<std::string, Operator>		operators;
 static std::map<Operator, unsigned int>		precedence;
+static std::map<std::string, UnaryOperator> unaryOperators;
 
 static std::ifstream file;
 static std::string filename;
@@ -68,13 +69,19 @@ void installOperators() {
  
 }
 
+void installUnaryOperators() {
+	unaryOperators["!"] = LOGICALNOT;
+	unaryOperators["~"] = BITWISENOT;
+	unaryOperators["-"] = UNARYMINUS;
+}
+
 void installPrecedence() {
 	precedence[PLUS] = 20;
 	precedence[MINUS] = 20;
 	precedence[MULT] = 40;
 	precedence[DIV] = 40;
 	precedence[EQUALS] = 10;
-	
+	// TODO!!!!
 }
 
 BuiltinType typeLookup(std::string name) {
@@ -107,6 +114,12 @@ unsigned int precedenceLookup(Operator op) {
 	return precedence.at(op);
 }
 
+UnaryOperator unaryOperatorLookup(std::string data) {
+	if(unaryOperators.find(data) == unaryOperators.end())
+		return NOT_UNARY;
+	return unaryOperators.at(data);
+}
+
 char getSourceChar() {
 	return file.get();
 }
@@ -120,6 +133,7 @@ int main(int argc, char *argv[]) {
 	installTypes();
 	installKeywords();
 	installOperators();
+	installUnaryOperators();
 	installPrecedence();
 
 

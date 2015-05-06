@@ -18,6 +18,7 @@
 #include "ast/variableinit.h"
 #include "ast/ifstatement.h"
 #include "ast/whilestatement.h"
+#include "ast/unaryoperation.h"
 
 // the current function
 extern FunctionDefinition *currentFn;
@@ -60,6 +61,7 @@ private:
 	Expression 			*parseFunctionCall();
 	Expression 			*parseIfStatement();
 	Expression 			*parseWhileStatement();
+	Expression 			*parseUnaryOperation();
 
 
 

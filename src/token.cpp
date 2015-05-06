@@ -19,8 +19,10 @@ Token::Type Token::getTypeFromString(std::string data) {
 	
 	// followed by a reserved type name
 	if(typeLookup(data) != TYPE_UNKNOWN) return TYPE_NAME;
-	
+
 	if(operatorLookup(data) != NOT_OP) return OPERATOR;
+
+	if(unaryOperatorLookup(data) != NOT_UNARY) return UNARY_OPERATOR;
 	
 	// if not check it's an integer or float literal
 	if(isInteger(data)) return INT_LITERAL;
@@ -93,6 +95,10 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 			ss << c;
 
 			addIfNotEmpty(tokens, ss, line);
+		} else if(isUnaryOperatorChar(c)) {
+			addIfNotEmpty(tokens, ss, line);
+			ss << c;
+			addIfNotEmpty(tokens, ss, line);
 		} else if(isOperatorChar(c)) {
 			// check nextC to see if it is a double char operator
 			if(isOperatorChar(nextC)) {
@@ -121,8 +127,12 @@ bool Token::tokenize(std::vector<Token> &tokens) {
 
 bool Token::isOperatorChar(char c) {
 	return c == '+' || c == '-' || c == '*' || c == '/' ||
-		c == '=' || c == '<' || c == '>' || c == '!' || c == '%'
+		c == '=' || c == '<' || c == '>' || c == '%'
 		|| c == '&';
+}
+
+bool Token::isUnaryOperatorChar(char c) {
+	return c == '!' || c == '~';
 }
 
 std::ostream& operator<<(std::ostream& out, const Token::Type t) {
@@ -141,7 +151,8 @@ std::ostream& operator<<(std::ostream& out, const Token::Type t) {
 		SWITCH_STRING(Token::CLOSE_PAREN);
 		SWITCH_STRING(Token::DELIMETER);
 		SWITCH_STRING(Token::TYPE_NAME);
-		SWITCH_STRING(Token::END)
+		SWITCH_STRING(Token::END);
+		SWITCH_STRING(Token::UNARY_OPERATOR);
 		SWITCH_STRING(Token::TOKEN_UNKNOWN);
 	}
 	#undef SWITCH_STRING
