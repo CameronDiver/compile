@@ -71,9 +71,6 @@ enum Operator {
 	BITWISEAND,
 	LOGICALAND,
 
-	BITWISENOT,
-	LOGICALNOT,
-
 	BITWISEOR,
 	LOGICALOR,
 
@@ -83,6 +80,16 @@ enum Operator {
 	NOT_OP
 };
 
+enum UnaryOperator {
+	BITWISENOT,
+	LOGICALNOT,
+
+	UNARYMINUS,
+
+
+	NOT_UNARY
+};
+
 
 
 // defined in main.cpp
@@ -90,6 +97,7 @@ BuiltinType typeLookup(std::string data);
 Keyword keywordLookup(std::string data);
 Operator operatorLookup(std::string data);
 unsigned int precedenceLookup(Operator op);
+UnaryOperator unaryOperatorLookup(std::string data);
 
 // get the next character in the source file
 // also define in main.cpp, allows the source to come from different places

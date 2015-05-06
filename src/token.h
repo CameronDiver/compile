@@ -28,6 +28,8 @@ public:
 
 		END,
 
+		UNARY_OPERATOR,
+
 		TOKEN_UNKNOWN
 	};
 
@@ -56,6 +58,7 @@ public:
 private:
 	Type getTypeFromString(std::string data);
 	static bool isOperatorChar(char c);
+	static bool isUnaryOperatorChar(char c);
 
 
 };

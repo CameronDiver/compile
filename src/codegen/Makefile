@@ -1,6 +1,6 @@
 OBJS=binaryoperation.o call.o codegen.o floatliteral.o functionbody.o\
 functiondef.o ifstatement.o intliteral.o symbolref.o variableinit.o\
-whilestatement.o
+whilestatement.o unaryoperation.o
 
 OUT=codegen.a
 
