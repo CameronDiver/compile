@@ -2,7 +2,7 @@
 
 using namespace llvm;
 
-Double::Double(double val)
+Double::Double(double val=0.0)
 	: LanguageType(DOUBLE) {
 		value = val;
 }

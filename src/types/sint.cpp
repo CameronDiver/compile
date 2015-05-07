@@ -2,7 +2,7 @@
 
 using namespace llvm;
 
-SignedInteger::SignedInteger(int32_t value)
+SignedInteger::SignedInteger(int32_t value=0)
 :LanguageType(INTEGER) {
 	this->value = value;
 }
