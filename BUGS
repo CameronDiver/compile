@@ -1,1 +1,1 @@
-operator precedence doesn't work properly
+Subtraction is being classed as unary operation. Need to do some checking.
