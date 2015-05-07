@@ -1,3 +1,5 @@
+extern int printNum | int a |
+
 int mod | int a, int b |
 	while a >= b
 		a = a - b
@@ -11,7 +13,7 @@ int main ||
 		int divisor = prime - 1
 		int isprime = 1
 		while divisor > 1
-			if mod(prime, divisor)
+			if mod(prime, divisor) == 0
 				
 			else
 				isprime = 0
