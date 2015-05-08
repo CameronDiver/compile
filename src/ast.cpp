@@ -642,10 +642,18 @@ Expression *AbstractSyntaxTree::parseWhileStatement() {
 
 Expression *AbstractSyntaxTree::parseUnaryOperation() {
 	UnaryOperator op;
-	if((op = unaryOperatorLookup(currentToken->strData)) == NOT_UNARY)
-		// must be a primary expression
-		return parsePrimaryExpression();
+	if((op = unaryOperatorLookup(currentToken->strData)) == NOT_UNARY){
+		// must be a primary expression or a unary minus masquerading
+		// as a binary operator
+		if(operatorLookup(currentToken->strData) == MINUS) {
+			// TODO: More stringent checking that we don't have 
+			// a syntax error
+			op = UNARYMINUS;
+			goto makeUnaryOperation;
+		} else return parsePrimaryExpression();
+	}
 
+	makeUnaryOperation:
 	getNextToken();
 	if(Expression *operand = parseUnaryOperation())
 		return new UnaryOperation(op, operand);

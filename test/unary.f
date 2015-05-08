@@ -1,4 +1,4 @@
 int main | int argc |
-	uint a = argc
+	int a = ~argc +1
 	a
 end

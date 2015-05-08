@@ -81,7 +81,11 @@ void installOperators() {
 void installUnaryOperators() {
 	unaryOperators["!"] = LOGICALNOT;
 	unaryOperators["~"] = BITWISENOT;
-	unaryOperators["-"] = UNARYMINUS;
+	// Don't set - to UNARYMINUS here,
+	// because it is the same character as the 
+	// binary minus it is handled specially
+	//unaryOperators["-"] = UNARYMINUS;
+	
 }
 
 void installPrecedence() {
