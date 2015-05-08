@@ -6,7 +6,7 @@
 class Boolean : public LanguageType {
  public:
  	bool value;
- 	Boolean(bool val);
+ 	Boolean(bool val=false);
 
  	llvm::Type *getLLVMType();
 

@@ -2,7 +2,7 @@
 
 using namespace llvm;
 
-LongInteger::LongInteger(int64_t val=0)
+LongInteger::LongInteger(int64_t val)
 	: LanguageType(LONG_INTEGER) {
 
 	value = val;

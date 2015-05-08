@@ -8,7 +8,7 @@
 class SignedInteger : public LanguageType {
  public:
  	int32_t value;
- 	SignedInteger(int32_t value);
+ 	SignedInteger(int32_t value=0);
 
  	llvm::Type *getLLVMType();
 

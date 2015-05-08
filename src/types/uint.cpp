@@ -2,7 +2,7 @@
 
 using namespace llvm;
 
-UnsignedInteger::UnsignedInteger(uint32_t value=0):
+UnsignedInteger::UnsignedInteger(uint32_t value):
 LanguageType(UNSIGNED) {
 	this->value = value;
 }

@@ -7,7 +7,7 @@ class Double : public LanguageType {
  public:
  	double value;
 
- 	Double(double val);
+ 	Double(double val=0.0);
 
  	llvm::Type *getLLVMType();
 

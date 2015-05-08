@@ -7,7 +7,7 @@
 class UnsignedInteger : public LanguageType {
  public:
  	uint32_t value;
- 	UnsignedInteger(uint32_t value);
+ 	UnsignedInteger(uint32_t value=0);
 
  	llvm::Type *getLLVMType();
 

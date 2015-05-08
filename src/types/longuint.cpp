@@ -2,7 +2,7 @@
 
 using namespace llvm;
 
-LongUnsigned::LongUnsigned(uint64_t val=0)
+LongUnsigned::LongUnsigned(uint64_t val)
 	: LanguageType(LONG_UNSIGNED) {
 
 	value = val;

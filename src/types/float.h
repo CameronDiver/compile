@@ -6,7 +6,7 @@
 class Float : public LanguageType {
  public:
  	float value;
- 	Float(float val);
+ 	Float(float val=0.0);
 
  	llvm::Type *getLLVMType();
 

@@ -8,7 +8,7 @@ class LongUnsigned : public LanguageType {
  public:
  	uint64_t value;
 
- 	LongUnsigned(uint64_t val);
+ 	LongUnsigned(uint64_t val=0);
 
  	llvm::Type *getLLVMType();
 

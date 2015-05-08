@@ -1,6 +1,6 @@
 #include "bool.h"
 
-Boolean::Boolean(bool val=false) : LanguageType(BOOLEAN) {
+Boolean::Boolean(bool val) : LanguageType(BOOLEAN) {
 	value = val;
 }
 

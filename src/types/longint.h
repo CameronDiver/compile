@@ -8,7 +8,7 @@ class LongInteger : public LanguageType {
  public:
  	int64_t value;
 
- 	LongInteger(int64_t val);
+ 	LongInteger(int64_t val=0);
 
  	llvm::Type *getLLVMType();
 

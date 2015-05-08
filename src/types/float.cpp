@@ -2,7 +2,7 @@
 
 using namespace llvm;
 
-Float::Float(float val=0.0) : LanguageType(FLOAT) {
+Float::Float(float val) : LanguageType(FLOAT) {
 	value = val;
 }
 
