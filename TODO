@@ -5,21 +5,17 @@ add the backslash character to allow statements to span lines
 or maybe change the spec so that newlines arent counted as delimiters
 and make the condition code for control flow statements more intelligient
 
-extern
-
 scan all the code for functions before generating code, so that functions don't have to be forward declared
 
 better error reporting in codegen
 
-make integer division and float division different operators
-
-Support signed as well as unsigned integers
+Support signed as well as unsigned integers - Partially
 
 support void, bool
 
 allow pointer types
 
-allow unary operators
+allow unary operators - Not fully done
 
 add for and foreach
 
