@@ -2,7 +2,7 @@
 #define SIGNED_INT_TYPE_H
 
 #include "types.h"
-#include <cstdint>
+#include "languagetype.h"
 
 // signed 32 bit integer
 class SignedInteger : public LanguageType {

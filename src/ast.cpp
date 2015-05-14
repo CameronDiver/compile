@@ -237,8 +237,6 @@ FunctionBody *AbstractSyntaxTree::parseFunctionBody() {
 		// functions will keep matching until an end as well, 
 		// keeping everything together, unless an end is missing,
 		// in which case the while above will fail and it can be detected
-		// std::cout << "here parseFunctionBody, token: " << currentToken->getType() 
-		// 	<< " - " << currentToken->strData << std::endl;
 
 		Expression *exp = parseExpression();
 		if(exp == NULL) {

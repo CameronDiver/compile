@@ -1,3 +1,18 @@
+Now
+--------------------------------------------------------------------
+Get rid of the intliteral and floatliteral classes and have a single
+literal class which then hooks into the type class itself. 
+	- Not sure about this, LLVM does constant folding itself
+		- YES. make a tokenizer which makes floats, ints, negatives whatever
+		all in one literal class. Then when codegen is happening, if a literal
+		is part of a calculation, the type can be assessed from the literal 
+		and operations can be validated.
+
+Implement a symbol class which stores information about it's type
+and stuff like that, so when the compiler gets to the point:
+uint a = -1 it can spit out a warning that incompatible types.
+
+
 Short term
 --------------------------------------------------------------------
 

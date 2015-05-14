@@ -10,6 +10,11 @@ public:
 
 	virtual llvm::Value *codegen() = 0;
 
+	virtual bool isLiteral() {
+		// the literal classes override this function
+		return false;
+	}
+
 #if defined(DEBUG)
 	virtual std::string prettyPrint() = 0;
 #endif

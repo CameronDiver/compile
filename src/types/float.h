@@ -1,7 +1,7 @@
 #ifndef FLOAT_TYPE_H 
 #define FLOAT_TYPE_H
 
-#include "types.h"
+#include "languagetype.h"
 
 class Float : public LanguageType {
  public:

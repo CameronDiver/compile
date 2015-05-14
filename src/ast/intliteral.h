@@ -7,12 +7,25 @@
 
 #include "expression.h"
 
+#include "types/types.h"
+
 class IntLiteral : public Expression {
 public:
-	uint32_t value;
-	IntLiteral(uint32_t val) : value(val) {}
+	enum Subtypes {
+		SIGNED,
+		LONG
+	};
+
+	int64_t value;
+	LanguageType *type;
+
+
+	IntLiteral(int64_t val) : value(val) {}
 
 	llvm::Value *codegen();
+
+
+	bool isLiteral() { return true; }
 
 #if defined(DEBUG)
 	std::string prettyPrint() {

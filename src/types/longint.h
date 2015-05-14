@@ -2,7 +2,7 @@
 #define TYPES_LONG_INT_H
 
 #include <cstdint>
-#include "types.h"
+#include "languagetype.h"
 
 class LongInteger : public LanguageType {
  public:

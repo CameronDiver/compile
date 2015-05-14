@@ -1,7 +1,7 @@
 #ifndef TYPES_BOOL_H
 #define TYPES_BOOL_H
 
-#include "types.h"
+#include "languagetype.h"
 
 class Boolean : public LanguageType {
  public:

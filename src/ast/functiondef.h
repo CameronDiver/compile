@@ -20,10 +20,10 @@ public:
 
 	FunctionDefinition(BuiltinType t, std::string symbolName, std::vector<ArgPair> args, FunctionBody *fbody)
 		: type(t), fname(symbolName), arguments(args), body(fbody) {
-#if defined(DEBUG)
-		 prettyPrint(); 
-#endif
-		}
+			#if defined(DEBUG)
+				prettyPrint(); 
+			#endif
+	};
 
 	FunctionDefinition(BuiltinType t, std::string name, std::vector<ArgPair> args)
 	: type(t), fname(name), arguments(args), body(NULL) {}

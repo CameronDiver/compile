@@ -1,4 +1,4 @@
-OBJS=types.o sint.o uint.o float.o double.o longint.o longuint.o 
+OBJS=sint.o uint.o float.o double.o longint.o longuint.o languagetype.o
 
 OUT=types.a
 

@@ -1,7 +1,7 @@
 #ifndef TYPE_DOUBLE_H
 #define TYPE_DOUBLE_H
 
-#include "types.h"
+#include "languagetype.h"
 
 class Double : public LanguageType {
  public:

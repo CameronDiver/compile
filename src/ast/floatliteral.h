@@ -2,7 +2,7 @@
 #define AST_FLOAT_LITERAL_H
 
 #include "expression.h"
-
+#include "types/languagetype.h"
 #include <sstream>
 
 class FloatLiteral : public Expression {
@@ -12,6 +12,9 @@ public:
 
 	llvm::Value *codegen();
 
+	LanguageType *type;
+
+	bool isLiteral() { return true; }
 
 #if defined(DEBUG)
 	std::string prettyPrint() {

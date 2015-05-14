@@ -11,7 +11,7 @@ LDFLAGS  = `$(LLVM_CONFIG) --ldflags --system-libs --libs core native bitwriter 
 
 CODEGEN_DIR=$(BUILD_DIR)/codegen
 
-OBJS = ast.o builtins.o main.o token.o jit.o
+OBJS = ast.o builtins.o main.o token.o jit.o symbol.o symboltable.o
 
 SUBLIBS = types/types.a codegen/codegen.a
 SUBLIBS_MAKE = types codegen
@@ -23,7 +23,7 @@ EXE = compile
 ALL: $(EXE)
 
 
-$(EXE): $(SUBLIBS) $(OBJS) 
+$(EXE): $(SUBLIBS) $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(SUBLIBS) $(LDFLAGS) -o $(EXE)
 
 

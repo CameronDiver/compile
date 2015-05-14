@@ -17,7 +17,6 @@ Value *UnaryOperation::codegen() {
 		break;
 
 		case UNARYMINUS:
-
 			return Builder.CreateNeg(operand->codegen(), "unaryneg");
 		break;
 

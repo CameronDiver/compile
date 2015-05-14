@@ -1,7 +1,7 @@
 #ifndef UNSIGNED_INT_TYPE_H
 #define UNSIGNED_INT_TYPE_H
 
-#include "types.h"
+#include "languagetype.h"
 
 // unsigned 32 bit integer
 class UnsignedInteger : public LanguageType {
