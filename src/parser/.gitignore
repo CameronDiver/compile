@@ -1,0 +1,7 @@
+lex.yy.c
+lextemp
+out
+parse
+parse.tab.*
+
+*.o
