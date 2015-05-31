@@ -11,13 +11,15 @@
 
 
     int yylex(void);
-    int yyerror(char *);
+    int yyerror(const char *);
 
     extern char *yytext;
 
 
 %}
 
+
+%define parse.error verbose
 
 %token BININT HEXINT DECINT FLOAT SYMBOL STRING 
 %token INTEGER_32 UINTEGER_32 INTEGER_8 UINTEGER_8
@@ -29,7 +31,7 @@
 %token COMP LTE GTE NOTEQ LT GT
 %token PLUS MINUS MULT DIV MOD
 
-%token NEWLINE COMMA
+%token NEWLINE 
 
 %left MULT DIV
 %left PLUS MINUS
@@ -40,14 +42,32 @@
  
 
 Program:
-        ExpressionList                                      { $$->printSubtree();root->addChild($$);}
-        |                 
+        StatementList                                      { root->addChild($1);}      
         ;
 
 
 /********************************************************/
 /* Function Definitions                                 */
 /********************************************************/
+
+
+/********************************************************/
+/* Statements                                           */
+/********************************************************/
+StatementList:
+        StatementList Delimiter Statement                   { $$->addChild($3);}
+        | Statement                                         { $$ = new StatementList(); $$->addChild($1);}
+        ;
+
+Statement:
+        Expression
+        |
+        ;
+
+Delimiter:
+        NEWLINE
+        | ';'
+        ;
 
 /********************************************************/
 /* Expressions                                          */
@@ -128,7 +148,7 @@ Value:
 
 %%
 
-int yyerror(char *err) {
+int yyerror(const char *err) {
     std::cout << "Error " << err << std::endl;
     return 1;
 }

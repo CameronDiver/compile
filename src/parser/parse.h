@@ -227,4 +227,11 @@ class String : public SyntaxTreeNode {
  	}
 };
 
+class StatementList : public SyntaxTreeNode {
+ public:
+ 	StatementList()
+ 	:	SyntaxTreeNode("Statement List") {
+ 	};
+};
+
 #endif
