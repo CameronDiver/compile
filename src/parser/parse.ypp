@@ -40,7 +40,7 @@
  
 
 Program:
-        Expression NEWLINE           { $$->printSubtree();root->addChild($$);}
+        ExpressionList                                      { $$->printSubtree();root->addChild($$);}
         |                 
         ;
 
@@ -48,93 +48,84 @@ Program:
 /********************************************************/
 /* Function Definitions                                 */
 /********************************************************/
-        
 
 /********************************************************/
 /* Expressions                                          */
 /********************************************************/
 
 
-Expression:
-        ExpressionList
-        ;
-
 ExpressionList:
-        ExpressionList ',' AssignExpression               { $$->addChild($3);}
-        | AssignExpression                                { $$ = new ExpressionList($1);}
+        ExpressionList ',' Expression                       { $$->addChild($3);}
+        | Expression                                        { $$ = new ExpressionList($1);}
         ;                                
 
+Expression:
+        AssignExpression
+
 AssignExpression:
-        AssignExpression PLUSEQ RelationExpression        { $$ = new BinaryOperation(OP_PLUSEQ, $1, $3); }
-        | AssignExpression MINUSEQ RelationExpression     { $$ = new BinaryOperation(OP_MINUSEQ, $1, $3);}
-        | AssignExpression MULTEQ RelationExpression      { $$ = new BinaryOperation(OP_MULTEQ, $1, $3); }
-        | AssignExpression DIVEQ RelationExpression       { $$ = new BinaryOperation(OP_DIVEQ, $1, $3);  }
-        | AssignExpression EQUALS RelationExpression      { $$ = new BinaryOperation(OP_ASSIGN, $1, $3); }
+        AssignExpression PLUSEQ RelationExpression          { $$ = new BinaryOperation(OP_PLUSEQ, $1, $3); }
+        | AssignExpression MINUSEQ RelationExpression       { $$ = new BinaryOperation(OP_MINUSEQ, $1, $3);}
+        | AssignExpression MULTEQ RelationExpression        { $$ = new BinaryOperation(OP_MULTEQ, $1, $3); }
+        | AssignExpression DIVEQ RelationExpression         { $$ = new BinaryOperation(OP_DIVEQ, $1, $3);  }
+        | AssignExpression EQUALS RelationExpression        { $$ = new BinaryOperation(OP_ASSIGN, $1, $3); }
         | RelationExpression
         ;
 
 RelationExpression:
-        RelationExpression COMP AddExpression       { $$ = new BinaryOperation(OP_COMP, $1, $3);    }
-        | RelationExpression LTE AddExpression      { $$ = new BinaryOperation(OP_LTE, $1, $3);     }
-        | RelationExpression GTE AddExpression      { $$ = new BinaryOperation(OP_GTE, $1, $3);     }
-        | RelationExpression LT AddExpression       { $$ = new BinaryOperation(OP_LT, $1, $3);      }
-        | RelationExpression GT AddExpression       { $$ = new BinaryOperation(OP_GT, $1, $3);      }
-        | RelationExpression NOTEQ AddExpression    { $$ = new BinaryOperation(OP_NEQ, $1, $3);     }
+        RelationExpression COMP AddExpression               { $$ = new BinaryOperation(OP_COMP, $1, $3);    }
+        | RelationExpression LTE AddExpression              { $$ = new BinaryOperation(OP_LTE, $1, $3);     }
+        | RelationExpression GTE AddExpression              { $$ = new BinaryOperation(OP_GTE, $1, $3);     }
+        | RelationExpression LT AddExpression               { $$ = new BinaryOperation(OP_LT, $1, $3);      }
+        | RelationExpression GT AddExpression               { $$ = new BinaryOperation(OP_GT, $1, $3);      }
+        | RelationExpression NOTEQ AddExpression            { $$ = new BinaryOperation(OP_NEQ, $1, $3);     }
         | AddExpression
         ;
 
 AddExpression:
-        AddExpression PLUS MultExpression           { $$ = new BinaryOperation(OP_PLUS, $1, $3);    }
-        | AddExpression MINUS MultExpression        { $$ = new BinaryOperation(OP_MINUS, $1, $3);   }
+        AddExpression PLUS MultExpression                   { $$ = new BinaryOperation(OP_PLUS, $1, $3);    }
+        | AddExpression MINUS MultExpression                { $$ = new BinaryOperation(OP_MINUS, $1, $3);   }
         | MultExpression                    
         ;
 
 MultExpression:
-        MultExpression MULT UnaryExpression         { $$ = new BinaryOperation(OP_MULT, $1, $3);    }
-        | MultExpression DIV UnaryExpression        { $$ = new BinaryOperation(OP_DIV, $1, $3);     }
-        | MultExpression MOD UnaryExpression        { $$ = new BinaryOperation(OP_MOD, $1, $3);     }
+        MultExpression MULT UnaryExpression                 { $$ = new BinaryOperation(OP_MULT, $1, $3);    }
+        | MultExpression DIV UnaryExpression                { $$ = new BinaryOperation(OP_DIV, $1, $3);     }
+        | MultExpression MOD UnaryExpression                { $$ = new BinaryOperation(OP_MOD, $1, $3);     }
         | UnaryExpression
         ;
 
 UnaryExpression:
-        NOT PostfixExpression                                   { $$ = new UnaryExpression(UNARY_NOT, $2);      }
-        | BITWISENOT PostfixExpression                          { $$ = new UnaryExpression(UNARY_BNOT, $2);     }
-        | INCREMENT PostfixExpression                           { $$ = new UnaryExpression(UNARY_PREINC, $2);   }
-        | DECREMENT PostfixExpression                           { $$ = new UnaryExpression(UNARY_PREDEC, $2);   }
-        | PLUS PostfixExpression                                { $$ = new UnaryExpression(UNARY_PLUS, $2);     }
-        | MINUS PostfixExpression                               { $$ = new UnaryExpression(UNARY_MINUS, $2);    }
+        NOT PostfixExpression                               { $$ = new UnaryExpression(UNARY_NOT, $2);      }
+        | BITWISENOT PostfixExpression                      { $$ = new UnaryExpression(UNARY_BNOT, $2);     }
+        | INCREMENT PostfixExpression                       { $$ = new UnaryExpression(UNARY_PREINC, $2);   }
+        | DECREMENT PostfixExpression                       { $$ = new UnaryExpression(UNARY_PREDEC, $2);   }
+        | PLUS PostfixExpression                            { $$ = new UnaryExpression(UNARY_PLUS, $2);     }
+        | MINUS PostfixExpression                           { $$ = new UnaryExpression(UNARY_MINUS, $2);    }
         | PostfixExpression
         ;
 
 PostfixExpression:
-        Value '[' Expression ']'                                { std::cout << "TODO: indexing operators ([ ])" << std::endl;}
-        | Value '.' SYMBOL                                      { std::cout << "TODO: member access" << std::endl;}
-        | Value INCREMENT                                       { $$ = new UnaryExpression(UNARY_POSTINC, $2);  }
-        | Value DECREMENT                                       { $$ = new UnaryExpression(UNARY_POSTDEC, $2);  }
-        | Value '(' ExpressionList ')'                          { $$ = new FunctionCall($1, $3);                }
-        | Value '(' ')'                                         { $$ = new FunctionCall($1, NULL);              }
+        Value '[' Expression ']'                            { std::cout << "TODO: indexing operators ([ ])" << std::endl;}
+        | Value '.' SYMBOL                                  { std::cout << "TODO: member access" << std::endl;}
+        | Value INCREMENT                                   { $$ = new UnaryExpression(UNARY_POSTINC, $2);  }
+        | Value DECREMENT                                   { $$ = new UnaryExpression(UNARY_POSTDEC, $2);  }
+        | Value '(' ExpressionList ')'                      { $$ = new FunctionCall($1, $3);                }
+        | Value '(' ')'                                     { $$ = new FunctionCall($1, NULL);              }
         | Value
         ;
 
 
 Value:
-        BININT                                      { $$ = new Integer(yytext, 2);                  }
-        | HEXINT                                    { $$ = new Integer(yytext, 16);                 }
-        | DECINT                                    { $$ = new Integer(yytext);                     }
-        | FLOAT                                     { $$ = new Float(yytext);                       }
+        BININT                                              { $$ = new Integer(yytext, 2);                  }
+        | HEXINT                                            { $$ = new Integer(yytext, 16);                 }
+        | DECINT                                            { $$ = new Integer(yytext);                     }
+        | FLOAT                                             { $$ = new Float(yytext);                       }
+        | SYMBOL                                            { $$ = new Symbol(yytext);                      }
+        | STRING                                            { $$ = new String(yytext);                      }
+        | '(' Expression ')'                                { $$ = $2;                                      }
         ;
-/*        | SYMBOL                                    { std::cout << "symbol\n";}
-        | STRING                                    { std::cout << "string\n";}
-        | "(" Expression ")"    
-        ;*/
 
-/*
-expr:
-        INTEGER                   { $$ = $1; }
-        | expr '+' expr           { $$ = $1 + $3; }
-        | expr '-' expr           { $$ = $1 - $3; }
-        ;
-*/
+
 %%
 
 int yyerror(char *err) {
