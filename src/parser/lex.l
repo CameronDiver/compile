@@ -80,6 +80,7 @@ whitespace					[ \t\r]+
 "and"						{return AND;}
 "&&"						{return AND;}
 "not"						{return NOT;}
+"!"							{return NOT;}
 "~"							{return BITWISENOT;}
 
 
@@ -90,6 +91,8 @@ whitespace					[ \t\r]+
 {symbol}					{return SYMBOL;}
 "\n"						{return NEWLINE;}
 {whitespace}				{/* Do Nothing */}
+
+.							{return *yytext;}
 
 
 

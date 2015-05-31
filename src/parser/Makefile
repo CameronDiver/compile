@@ -1,7 +1,7 @@
 CC=gcc
 CPP=g++
 
-CFLAGS=-std=c++11 -Wno-write-strings
+CFLAGS=-std=c++11 -Wno-write-strings -g
 
 LIBS=-ll
 

@@ -38,6 +38,27 @@ std::string opToStr(Operator op) {
 	}
 }
 
+std::string unaryOpToStr(UnaryOperator op) {
+	switch(op) {
+		case UNARY_NOT:
+			return "not";
+		case UNARY_BNOT:
+			return "~";
+		case UNARY_PREINC:
+			return "pre ++";
+		case UNARY_PREDEC:
+			return "pre --";
+		case UNARY_POSTINC:
+			return "post ++";
+		case UNARY_POSTDEC:
+			return "post --";
+		case UNARY_PLUS:
+			return "+";
+		case UNARY_MINUS:
+			return "-";
+	}
+}
+
 // current is the current node that is being added to
 SyntaxTreeNode *root, *currentNode;
 
