@@ -1,31 +1,105 @@
 %{
     #include <iostream>
+
+
+    #include "parse.h"
+
+    #ifndef YYSTYPE
+         #define YYSTYPE SyntaxTreeNode*
+    #endif
+   
+
+
     int yylex(void);
     int yyerror(char *);
 
-    extern char *strVal;
+    extern char *yytext;
+
+
 %}
 
 
 %token BININT HEXINT DECINT FLOAT SYMBOL STRING 
+%token INTEGER_32 UINTEGER_32 INTEGER_8 UINTEGER_8
+%token INTEGER_16 UINTEGER_16 BOOLNAME FLOATNAME DOUBLENAME STRINGNAME
+%token EQUALS PLUSEQ MINUSEQ MULTEQ DIVEQ
+%token INCREMENT DECREMENT
+%token OR AND 
+%token BITWISENOT NOT SHR SHL
+%token COMP LTE GTE NOTEQ LT GT
+%token PLUS MINUS MULT DIV MOD
+
+%token NEWLINE
+
+/*%left MULT DIV
+%left PLUS MINUS
+%left COMP LTE GTE LT GT NOTEQ
+%left PLUSEQ MINUSEQ MULTEQ DIVEQ EQUALS*/
+
 %%
  
 
 Program:
-        Expression
-        | Program Expression
+        Expression NEWLINE           { $$->printSubtree();root->addChild($$);}
+        |                 
         ;
 
+
+/********************************************************/
+/* Expressions                                          */
+/*********************************************************/
+
+
 Expression:
-        Value
+        Expression PLUSEQ RelationExpression        { $$ = new BinaryOperation(OP_PLUSEQ, $1, $3); }
+        | Expression MINUSEQ RelationExpression     { $$ = new BinaryOperation(OP_MINUSEQ, $1, $3);}
+        | Expression MULTEQ RelationExpression      { $$ = new BinaryOperation(OP_MULTEQ, $1, $3); }
+        | Expression DIVEQ RelationExpression       { $$ = new BinaryOperation(OP_DIVEQ, $1, $3);  }
+        | Expression EQUALS RelationExpression      { $$ = new BinaryOperation(OP_ASSIGN, $1, $3); }
+        | RelationExpression
+        ;
+
+RelationExpression:
+        AddExpression
+        | RelationExpression COMP AddExpression     { $$ = new BinaryOperation(OP_COMP, $1, $3);    }
+        | RelationExpression LTE AddExpression      { $$ = new BinaryOperation(OP_LTE, $1, $3);     }
+        | RelationExpression GTE AddExpression      { $$ = new BinaryOperation(OP_GTE, $1, $3);     }
+        | RelationExpression LT AddExpression       { $$ = new BinaryOperation(OP_LT, $1, $3);      }
+        | RelationExpression GT AddExpression       { $$ = new BinaryOperation(OP_GT, $1, $3);      }
+        | RelationExpression NOTEQ AddExpression    { $$ = new BinaryOperation(OP_NEQ, $1, $3);     }
+        ;
+
+AddExpression:
+        AddExpression PLUS MultExpression           { $$ = new BinaryOperation(OP_PLUS, $1, $3);    }
+        | AddExpression MINUS MultExpression        { $$ = new BinaryOperation(OP_MINUS, $1, $3);   }
+        | MultExpression                    
+        ;
+
+MultExpression:
+        MultExpression MULT Value                   { $$ = new BinaryOperation(OP_MULT, $1, $3);    }
+        | MultExpression DIV Value                  { $$ = new BinaryOperation(OP_DIV, $1, $3);     }
+        | MultExpression MOD Value                  { $$ = new BinaryOperation(OP_MOD, $1, $3);     }
+        | Value
+        ;
+
+
+/*UnaryExpression:
+        UnaryOperator Value
+        | Value
+*/  
+
 
 Value:
-        BININT                  { std::cout << "Binary int " << strVal << std::endl; }
-        | HEXINT                { std::cout << "Hex int " << strVal << std::endl;}
-        | DECINT                { std::cout << "Dec int\n";}
-        | FLOAT                 { std::cout << "float\n";}   
+        BININT                                      { $$ = new Integer(yytext, 2);                  }
+        | HEXINT                                    { $$ = new Integer(yytext, 16);                 }
+        | DECINT                                    { $$ = new Integer(yytext);                     }
+       ;
+       /* | FLOAT                 { std::cout << "float\n";}   
         | SYMBOL                { std::cout << "symbol\n";}
         | STRING                { std::cout << "string\n";}
+        | "(" Expression ")"    
+        ;*/
+
 /*
 expr:
         INTEGER                   { $$ = $1; }
@@ -37,4 +111,5 @@ expr:
 
 int yyerror(char *err) {
     std::cout << "Error " << err << std::endl;
+    return 1;
 }

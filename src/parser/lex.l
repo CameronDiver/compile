@@ -1,10 +1,16 @@
 %{
 	#include <stdio.h>
+
+	#include "parse.h"
+
+	#ifndef YYSTYPE
+         #define YYSTYPE SyntaxTreeNode*
+    #endif
+
 	#include "parse.tab.hpp"
 	void yyerror(char *);
 
-	char *strVal;
-	#define INIT strVal = yytext
+	// extern YYSTYPE yylval;
 %}
 
 
@@ -19,16 +25,72 @@ symbol						[a-zA-Z_]+(alpha|digit)*
 /* Taken from https://www.lysator.liu.se/c/ANSI-C-grammar-l.html */
 string						\"(\\.|[^\\"])*\"
 
+whitespace					[ \t\r]+
+
 %%
 
 
-{bindigit}+"b"				{INIT;return BININT;}
-"0x"{hexdigit}+				{INIT;return HEXINT;}
-{digit}+					{INIT;return DECINT;}
-{digit}*"."{digit}+			{INIT;return FLOAT;}
+{bindigit}+"b"				{return BININT;}
+"0x"{hexdigit}+				{return HEXINT;}
+{digit}+					{return DECINT;}
+{digit}*"."{digit}+			{return FLOAT;}
 
-{symbol}					{INIT;return SYMBOL;}
-{string}					{INIT;return STRING;}
+{string}					{return STRING;}
+
+"int"						{return INTEGER_32;}
+"uint"						{return UINTEGER_32;}
+"int8"						{return INTEGER_8;}
+"uint8"						{return UINTEGER_8;}
+"int16"						{return INTEGER_16;}
+"uint16"					{return UINTEGER_16;}
+"int32"						{return INTEGER_32;}
+"uint32"					{return UINTEGER_32;}
+"bool"						{return BOOLNAME;}
+"float"						{return FLOATNAME;}
+"double"					{return DOUBLENAME;}
+"string"					{return STRINGNAME;}
+
+"+"							{return PLUS;}
+"-"							{return MINUS;}
+"*"							{return MULT;}
+"/"							{return DIV;}
+"%"							{return MOD;}
+
+"="							{return EQUALS;}
+
+"++"						{return INCREMENT;}
+"--"						{return DECREMENT;}
+
+"=="						{return COMP;}
+"<="						{return LTE;}
+">="						{return GTE;}
+"!="						{return NOTEQ;}
+"<"							{return LT;}
+">"							{return GT;}
+
+"+="						{return PLUSEQ;}
+"-="						{return MINUSEQ;}
+"*="						{return MULTEQ;}
+"/="						{return DIVEQ;}
+
+">>"						{return SHR;}
+"<<"						{return SHL;}
+
+"or"						{return OR;}
+"and"						{return AND;}
+"&&"						{return AND;}
+"not"						{return NOT;}
+"~"							{return BITWISENOT;}
+
+
+
+"||"						{return OR;}
+
+
+{symbol}					{return SYMBOL;}
+"\n"						{return NEWLINE;}
+{whitespace}				{/* Do Nothing */}
+
 
 
 

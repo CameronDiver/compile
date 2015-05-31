@@ -1,7 +1,7 @@
 CC=gcc
 CPP=g++
 
-CFLAGS=-Wall
+CFLAGS=-std=c++11 -Wno-write-strings
 
 LIBS=-ll
 
@@ -26,7 +26,7 @@ all: build
 build: $(LEXOUTFILES) $(YACCOUTFILES) realbuild
 
 realbuild: $(OBJS)
-	$(CPP) $(LEXOUTFILES) $(OBJS) -o $(OUT) $(LIBS)
+	$(CPP) $(LEXOUTFILES) $(CFLAGS) $(OBJS) -o $(OUT) $(LIBS)
 
 $(LEXOUTFILES): $(LEXFILE)
 	$(LEX) $(LEXFILE)
@@ -34,10 +34,10 @@ $(LEXOUTFILES): $(LEXFILE)
 $(YACCOUTFILES): $(YACCFILE)
 	$(YACC) $(YACCFLAGS) $(YACCFILE)
 
-%.o: %.cpp
+%.o: %.cpp %.h
 	$(CPP) $(CFLAGS) -c -o $@ $<
 
-%.o: %.c
+%.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
