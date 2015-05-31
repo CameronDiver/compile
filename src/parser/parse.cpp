@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 #include "parse.h"
 
 std::string opToStr(Operator op) {
@@ -68,6 +69,12 @@ void setCurrentNode(SyntaxTreeNode *node) {
 
 
 int main(int argc, char *argv[]) {
+	if(argc >= 2){
+		yyin = fopen(argv[1], "r");
+	}
+	
+
+
 	// Setup a root node for the tree to begin building from
 	root = new SyntaxTreeNode("Root");
 	currentNode = root;

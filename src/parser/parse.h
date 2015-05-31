@@ -44,6 +44,7 @@ typedef enum {
 } UnaryOperator;
 
 int yyparse();
+extern FILE *yyin;
 std::string opToStr(Operator op);
 std::string unaryOpToStr(UnaryOperator op);
 
