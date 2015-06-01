@@ -21,9 +21,10 @@
 
 %define parse.error verbose
 
-%token BININT HEXINT DECINT FLOAT SYMBOL STRING 
+%token BININT HEXINT DECINT FLOAT SYMBOL STRING END
 %token INTEGER_32 UINTEGER_32 INTEGER_8 UINTEGER_8
 %token INTEGER_16 UINTEGER_16 BOOLNAME FLOATNAME DOUBLENAME STRINGNAME
+%token CHARNAME INTEGER_64 UINTEGER_64 VOIDNAME
 %token EQUALS PLUSEQ MINUSEQ MULTEQ DIVEQ
 %token INCREMENT DECREMENT
 %token OR AND 
@@ -42,26 +43,75 @@
  
 
 Program:
-        StatementList                                      { root->addChild($1);}      
+        Function                                            { root->addChild($1);}      
         ;
 
 
 /********************************************************/
 /* Function Definitions                                 */
 /********************************************************/
+FunctionList:
+        FunctionList Function
+        | Function
+        ;
 
+Function:
+        Type FunctionName '|' ArgumentList '|' StatementList END  { $$ = new FunctionDef($1, $2, $4, $6);}
+        ;
+
+ArgumentList:
+        ArgumentList ',' Argument                           { $$->addChild($3);             }     
+        | Argument                                          { $$ = new ArgumentList($1);    }
+        |                                                   { $$ = NULL;}
+        ;
+
+/* An Argument in a function definition */
+Argument:
+        Type ArgumentName                                   { $$ = new Argument($1, $2);    }
+        ;
+
+ArgumentName:
+        SYMBOL                                              { $$ = new Symbol(yytext);      }
+        ;
+
+FunctionName:
+        SYMBOL                                              { $$ = new Symbol(yytext);      }
+        ;
+
+/* TODO: Add in the inbuild language types */
+
+/*%token INTEGER_32 UINTEGER_32 INTEGER_8 UINTEGER_8
+%token INTEGER_16 UINTEGER_16 BOOLNAME FLOATNAME DOUBLENAME STRINGNAME
+%token CHARNAME INTEGER_64 UINTEGER_64 VOIDNAME*/
+Type:
+        SYMBOL                                              { $$ = new Type(yytext);        }
+        | INTEGER_32                                        { $$ = new Type(Type::INT32);   }
+        | UINTEGER_32                                       { $$ = new Type(Type::UINT32);  }
+        | INTEGER_8                                         { $$ = new Type(Type::INT8);    }
+        | UINTEGER_8                                        { $$ = new Type(Type::UINT8);   }
+        | INTEGER_16                                        { $$ = new Type(Type::INT16);   }
+        | UINTEGER_16                                       { $$ = new Type(Type::UINT16);  }
+        | INTEGER_64                                        { $$ = new Type(Type::INT64);   }
+        | UINTEGER_64                                       { $$ = new Type(Type::UINT64);  }
+        | BOOLNAME                                          { $$ = new Type(Type::BOOLEAN); }
+        | FLOATNAME                                         { $$ = new Type(Type::FLOAT);   }
+        | DOUBLENAME                                        { $$ = new Type(Type::DOUBLE);  }
+        | STRINGNAME                                        { $$ = new Type(Type::STRING);  }
+        | CHARNAME                                          { $$ = new Type(Type::CHAR);    }
+        | VOIDNAME                                          { $$ = new Type(Type::VOID);    }
+        ;
 
 /********************************************************/
 /* Statements                                           */
 /********************************************************/
-StatementList:
-        StatementList Delimiter Statement                   { $$->addChild($3);}
-        | Statement                                         { $$ = new StatementList(); $$->addChild($1);}
+StatementList:                                              
+        StatementList Delimiter Statement                   { if($3 != NULL) $$->addChild($3);  }
+        | Statement                                         { $$ = new StatementList($1);       }
         ;
 
 Statement:
         Expression
-        |
+        |                                                   { $$ = NULL;}
         ;
 
 Delimiter:
@@ -74,7 +124,7 @@ Delimiter:
 /********************************************************/
 
 
-ExpressionList:
+ExpressionList:     
         ExpressionList ',' Expression                       { $$->addChild($3);}
         | Expression                                        { $$ = new ExpressionList($1);}
         ;                                

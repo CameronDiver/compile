@@ -45,10 +45,17 @@ whitespace					[ \t\r]+
 "uint16"					{return UINTEGER_16;}
 "int32"						{return INTEGER_32;}
 "uint32"					{return UINTEGER_32;}
+"int64"						{return INTEGER_64;}
+"uint64"					{return UINTEGER_64;}
 "bool"						{return BOOLNAME;}
 "float"						{return FLOATNAME;}
 "double"					{return DOUBLENAME;}
 "string"					{return STRINGNAME;}
+"char"						{return CHARNAME;}
+"void"						{return VOIDNAME;}
+
+
+"end"						{return END;}
 
 "+"							{return PLUS;}
 "-"							{return MINUS;}

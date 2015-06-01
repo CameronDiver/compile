@@ -1,7 +1,7 @@
 CC=gcc
 CPP=g++
 
-CFLAGS=-std=c++11 -Wno-write-strings -g
+CFLAGS=-std=c++11 -Wno-write-strings -g -DDEBUG
 
 LIBS=-ll
 
@@ -16,6 +16,7 @@ YACCFILE=parse.ypp
 LEXOUTFILES=lex.yy.c
 YACCOUTFILES=parse.tab.cpp parse.tab.hpp
 
+GLOBALS=parse.h
 
 OBJS= parse.o parse.tab.o
 
@@ -37,8 +38,8 @@ $(YACCOUTFILES): $(YACCFILE)
 %.o: %.cpp %.h
 	$(CPP) $(CFLAGS) -c -o $@ $<
 
-%.o: %.cpp
-	$(CC) $(CFLAGS) -c -o $@ $<
+parse.tab.o: $(YACCOUTFILE)
+	$(CC) $(CFLAGS) -c -o $@ parse.tab.cpp
 
 clean:
 	rm $(OBJS)

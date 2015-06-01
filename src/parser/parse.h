@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <cstdint>
+#include <cstdio>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -42,6 +43,7 @@ typedef enum {
 	UNARY_PLUS,
 	UNARY_MINUS
 } UnaryOperator;
+
 
 int yyparse();
 extern FILE *yyin;
@@ -229,9 +231,158 @@ class String : public SyntaxTreeNode {
 
 class StatementList : public SyntaxTreeNode {
  public:
- 	StatementList()
+ 	StatementList(SyntaxTreeNode *entry)
  	:	SyntaxTreeNode("Statement List") {
+ 		if(entry != NULL) {
+ 			addChild(entry);
+ 		};
  	};
+};
+
+class Type : public SyntaxTreeNode {
+ public:
+	typedef enum {
+		INT32,
+		UINT32,
+		INT8,
+		UINT8,
+		INT16,
+		UINT16,
+		BOOLEAN,
+		FLOAT,
+		DOUBLE,
+		STRING,
+		CHAR,
+		INT64,
+		UINT64,
+		VOID,
+
+		CUSTOM
+	} LanguageType;
+
+	LanguageType type;
+	std::string image;
+
+	Type(LanguageType t)
+	: 	SyntaxTreeNode("Type"), type(t) {
+	}
+
+	Type(char *_image)
+	:	SyntaxTreeNode("Custom Type"), type(CUSTOM), image(_image) {
+
+	}
+
+};
+
+class Argument : public SyntaxTreeNode {
+ public:
+ 	Type *type;
+ 	Symbol *name;
+
+ 	Argument(SyntaxTreeNode *_type, SyntaxTreeNode *_name)
+ 	:	SyntaxTreeNode("Argument") {
+ 		type = dynamic_cast<Type *>(_type);
+ 		if(type == NULL) {
+ 			// TODO: Errors
+ 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
+ 				<< "   Attempted cast to Type but actual class is " << _type->getStr() << std::endl;
+ 		};
+ 		name = dynamic_cast<Symbol *>(_name);
+ 		if(name == NULL) {
+ 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
+ 				<< "   Attempted cast to Symbol but actual class is " << _name->getStr() << std::endl;
+ 		}
+ 	};
+
+ 	std::string getStr() {
+ 		std::stringstream ss;
+ 		ss << "Argument " << name->getStr();
+ 		return ss.str();
+ 	}
+};
+
+class ArgumentList : public SyntaxTreeNode {
+ public:
+
+ 	ArgumentList(SyntaxTreeNode *arg)
+ 	:	SyntaxTreeNode("Argument List") {
+#if defined(DEBUG)
+ 		Argument *a = dynamic_cast<Argument *>(arg);
+ 		if(a == NULL) {
+ 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
+ 				<< "   Attempted cast to Argument but actual class is " << arg->getStr() << std::endl;
+ 		}
+#endif
+
+ 		addChild(arg);
+ 	};
+};
+
+class FunctionDef : public SyntaxTreeNode {
+ public:
+ 	/* TODO: Process these to types representing what they are */
+ 	Type *type;
+ 	Symbol *name;
+ 	ArgumentList *argList;
+ 	StatementList *statementList;
+
+
+ 	FunctionDef(SyntaxTreeNode *_type, SyntaxTreeNode *_name, 
+ 	  SyntaxTreeNode *_argList, SyntaxTreeNode *_statementList)
+ 	:	SyntaxTreeNode("Function Definition") {
+
+
+ 		type = dynamic_cast<Type *>(_type);
+ 		if(type == NULL) {
+ 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
+ 				<< "   Attempted cast to Type but actual class is " << _type->getStr() << std::endl;
+ 		};
+
+ 		name = dynamic_cast<Symbol *>(_name);
+ 		if(name == NULL){
+ 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
+ 				<< "   Attempted cast to Symbol but actual class is " << _name->getStr() << std::endl;
+ 		}
+
+
+ 		if(_argList != NULL) {
+	 		argList = dynamic_cast<ArgumentList *>(_argList);
+	 		if(argList == NULL){
+	 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
+	 				<< "   Attempted cast to Argument List but actual class is " << _argList->getStr() << std::endl;
+	 		}
+	 	} else {
+	 		argList = NULL;
+	 	}
+
+ 		statementList = dynamic_cast<StatementList *>(_statementList);
+ 		if(statementList == NULL) {
+ 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
+ 				<< "   Attempted cast to Statement List but actual class is " << _statementList->getStr() << std::endl;
+ 		}
+
+ 		children = statementList->children;
+ 		std::cout << "Statement list size:" << statementList->children.size() << std::endl;
+ 		//std::cout << "Statement list [0] = " << statementList->children[0]->getStr() << std::endl;
+ 		//std::cout << "Statement list [1] = " << statementList->children[1]->getStr() << std::endl;
+
+ 	};
+
+ 	std::string getStr() {
+ 		std::stringstream ss;
+ 		ss << "Function Definition: " << type->getStr() 
+ 			<< name->getStr() << " | ";
+
+ 		if(argList != NULL) {
+	 		for(uint i = 0; i < argList->children.size(); ++i) {
+	 			Argument *a = dynamic_cast<Argument *>(argList->children[i]);
+	 			ss << a->type->getStr() << " " << a->name->getStr() << ", ";
+	 		}
+	 	}
+ 		ss << " | ";
+
+ 		return ss.str();
+ 	}
 };
 
 #endif
