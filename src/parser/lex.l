@@ -13,6 +13,7 @@
 	// extern YYSTYPE yylval;
 %}
 
+%option yylineno
 
 digit						[0-9]
 alpha						[a-zA-Z]

@@ -198,7 +198,9 @@ Value:
 
 %%
 
+extern int yylineno;
+
 int yyerror(const char *err) {
-    std::cout << "Error " << err << std::endl;
+    std::cout << "Error " << err << " on line " << yylineno << std::endl;
     return 1;
 }
