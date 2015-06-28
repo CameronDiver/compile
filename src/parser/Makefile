@@ -1,7 +1,8 @@
-CC=gcc
-CPP=g++
+CC=clang
+CPP=clang++
 
-CFLAGS=-std=c++11 -Wno-write-strings -g -DDEBUG
+CFLAGS=-Wall -DDEBUG -g
+CPPFLAGS=-Wall -std=c++11 -Wno-write-strings -Wno-deprecated-register -g -DDEBUG
 
 LIBS=-ll
 
@@ -14,11 +15,15 @@ LEXFILE=lex.l
 YACCFILE=parse.ypp
 
 LEXOUTFILES=lex.yy.c
+YACCOUTFILE=parse.tab.cpp
 YACCOUTFILES=parse.tab.cpp parse.tab.hpp
 
-GLOBALS=parse.h
+YACCOBJ=parse.tab.o
+LEXOBJ=lex.yy.o
 
-OBJS= parse.o parse.tab.o
+GLOBALS=parse.h $(LEXOUTFILES) $(YACCOUTFILES)
+
+OBJS= parse.o $(YACCOBJ) $(LEXOBJ)
 
 OUT=parse
 
@@ -27,21 +32,23 @@ all: build
 build: $(LEXOUTFILES) $(YACCOUTFILES) realbuild
 
 realbuild: $(OBJS)
-	$(CPP) $(LEXOUTFILES) $(CFLAGS) $(OBJS) -o $(OUT) $(LIBS)
+	$(CPP) $(CPPFLAGS) $(OBJS) -o $(OUT) $(LIBS)
 
 $(LEXOUTFILES): $(LEXFILE)
 	$(LEX) $(LEXFILE)
 
-$(YACCOUTFILES): $(YACCFILE)
+$(YACCOUTFILE): $(YACCFILE)
 	$(YACC) $(YACCFLAGS) $(YACCFILE)
 
 %.o: %.cpp %.h
-	$(CPP) $(CFLAGS) -c -o $@ $<
+	$(CPP) $(CPPFLAGS) -c -o $@ $<
 
-parse.tab.o: $(YACCOUTFILE)
-	$(CC) $(CFLAGS) -c -o $@ parse.tab.cpp
+$(YACCOBJ): $(YACCOUTFILES)
+	$(CPP) $(CPPFLAGS) -c -o $@ $<
+
+$(LEXOBJ): $(LEXOUTFILES)
+	$(CPP) $(CPPFLAGS) -Wno-unused-function -Wno-unneeded-internal-declaration -c -o $@ $<
 
 clean:
-	rm $(OBJS)
-	rm $(LEXOUTFILES) $(YACCOUTFILES)
+	rm $(OBJS) $(LEXOUTFILES) $(YACCOUTFILES)
 
