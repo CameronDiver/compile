@@ -23,7 +23,7 @@ YACCOUTFILES=parse.tab.cpp parse.tab.hpp
 YACCOBJ=parse.tab.o
 LEXOBJ=lex.yy.o
 
-GLOBALS=parse.h $(LEXOUTFILES) $(YACCOUTFILES) $(wildcard $(NODEDIR)/*.h)
+GLOBALS=parse.h $(wildcard $(NODEDIR)/*.h)
 
 OBJS= parse.o $(YACCOBJ) $(LEXOBJ)
 
