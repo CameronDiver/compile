@@ -8,6 +8,7 @@
 template<typename node>
 class NodeList : public SyntaxTreeNode {
 public:
+
 	NodeList(std::string name, SyntaxTreeNode *item)
 	: SyntaxTreeNode(name) {
 		addChild(item);
@@ -51,6 +52,13 @@ public:
 		}
 		return child;
 	}
+
+
+	// Overshadow the vector already created in
+	// SyntaxTreeNode. 
+	// TODO: Find out if this means there are two
+	// vectors being kept.
+	std::vector<node *> children;
 };
 
 #endif
