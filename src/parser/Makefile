@@ -1,6 +1,8 @@
 CC=clang
 CPP=clang++
 
+NODEDIR=nodes
+
 CFLAGS=-Wall -DDEBUG -g
 CPPFLAGS=-Wall -std=c++11 -Wno-write-strings -Wno-deprecated-register -g -DDEBUG
 
@@ -21,7 +23,7 @@ YACCOUTFILES=parse.tab.cpp parse.tab.hpp
 YACCOBJ=parse.tab.o
 LEXOBJ=lex.yy.o
 
-GLOBALS=parse.h $(LEXOUTFILES) $(YACCOUTFILES)
+GLOBALS=parse.h $(LEXOUTFILES) $(YACCOUTFILES) $(wildcard $(NODEDIR)/*.h)
 
 OBJS= parse.o $(YACCOBJ) $(LEXOBJ)
 
@@ -34,13 +36,13 @@ build: $(LEXOUTFILES) $(YACCOUTFILES) realbuild
 realbuild: $(OBJS)
 	$(CPP) $(CPPFLAGS) $(OBJS) -o $(OUT) $(LIBS)
 
-$(LEXOUTFILES): $(LEXFILE)
+$(LEXOUTFILES): $(LEXFILE) $(GLOBALS)
 	$(LEX) $(LEXFILE)
 
-$(YACCOUTFILE): $(YACCFILE)
+$(YACCOUTFILE): $(YACCFILE) $(GLOBALS)
 	$(YACC) $(YACCFLAGS) $(YACCFILE)
 
-%.o: %.cpp %.h
+%.o: %.cpp %.h $(GLOBALS)
 	$(CPP) $(CPPFLAGS) -c -o $@ $<
 
 $(YACCOBJ): $(YACCOUTFILES)

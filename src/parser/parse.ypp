@@ -1,21 +1,16 @@
 %{
     #include <iostream>
 
-
     #include "parse.h"
 
     #ifndef YYSTYPE
          #define YYSTYPE SyntaxTreeNode*
     #endif
-   
-
 
     int yylex(void);
     int yyerror(const char *);
 
     extern char *yytext;
-
-
 %}
 
 
@@ -106,7 +101,7 @@ Type:
 /********************************************************/
 StatementList:                                              
         StatementList Delimiter Statement                   { if($3 != NULL) $$->addChild($3);  }
-        | Statement                                         { $$ = new StatementList($1);       }
+        | Statement                                         { $$ = new GenericList($1);       }
         ;
 
 Statement:
@@ -126,7 +121,7 @@ Delimiter:
 
 ExpressionList:     
         ExpressionList ',' Expression                       { $$->addChild($3);}
-        | Expression                                        { $$ = new ExpressionList($1);}
+        | Expression                                        { $$ = new GenericList($1);}
         ;                                
 
 Expression:
