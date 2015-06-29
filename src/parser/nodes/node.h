@@ -44,5 +44,21 @@ class SyntaxTreeNode {
 
 };
 
+class CastException {
+public:
+	CastException(std::string msg)
+	:	message(msg) {}
+
+	std::string getMsg(){
+		return message;
+	}
+
+private:
+	std::string message;
+};
+
+// Helper macros
+#define TRY_CAST(obj, resType) [&obj]()-> resType { resType ret = dynamic_cast<resType>(obj); \
+	if((obj) == NULL) throw new CastException("TODO"); return ret;}()
 
 #endif
