@@ -1,7 +1,7 @@
 %{
 	#include <stdio.h>
 
-	#include "parse.h"
+	class SyntaxTreeNode;
 
 	#ifndef YYSTYPE
          #define YYSTYPE SyntaxTreeNode*
