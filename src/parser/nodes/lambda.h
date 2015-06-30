@@ -9,9 +9,12 @@ class LambdaFunction : public SyntaxTreeNode {
 public:
 	ArgumentList *args;
 	GenericList *statements;
+	
 	LambdaFunction(SyntaxTreeNode *argList, SyntaxTreeNode *stmtList)
 	:	SyntaxTreeNode("Lambda Function") {
+
 		args = TRY_CAST(argList, ArgumentList*);
+
 		statements = TRY_CAST(stmtList, GenericList*);
 	}
 
@@ -24,10 +27,13 @@ public:
 		}
 
 		ss << " |";
-
-		for(auto st: *statements) {
-			ss << st->getStr() << std::endl;
+		
+		for(auto statement : *statements) {
+			ss << statement->getStr() << ";";
 		}
+
+
+		ss << "}";
 
 		return ss.str();
 	}

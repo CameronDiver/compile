@@ -22,7 +22,11 @@ class FunctionCall : public SyntaxTreeNode {
 
  	std::string getStr() {
  		std::stringstream ss;
- 		ss << "Function call " << name->getStr();
+ 		ss << "Function call " << name->getStr() << "( ";
+ 		for(auto arg : *args) {
+ 			ss << arg->getStr() << ", ";
+ 		}
+ 		ss << ")";
  		return ss.str();
  	}
 };

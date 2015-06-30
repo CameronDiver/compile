@@ -19,7 +19,7 @@ class BinaryOperation : public SyntaxTreeNode {
 
  	std::string getStr() {
  		std::stringstream ss;
- 		ss << "Binary Operation: " << LHS->getStr() << opToStr(op) << RHS->getStr();
+ 		ss << "Binary Operation: " <<  opToStr(op) << ": " << LHS->getStr() << "," << RHS->getStr();
  		
  		return ss.str();
  	}

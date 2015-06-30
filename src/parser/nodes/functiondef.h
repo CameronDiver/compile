@@ -43,14 +43,10 @@ class FunctionDef : public SyntaxTreeNode {
 	 		}
 	 	}
  		ss << " | ";
-
- 		for(uint i = 0; i < statementList->size(); ++i) {
- 			std::cout << statementList->children[i]->nodeName << std::endl;
- 			ss << statementList->children[i]->getStr() << "\n";
+ 		
+ 		for(auto statement : *statementList) {
+ 			ss << statement->getStr() << std::endl;
  		}
- 		//for(auto statement : *statementList) {
- 			//ss << statement->getStr() << std::endl;
- 		//}
 
  		return ss.str();
  	}
