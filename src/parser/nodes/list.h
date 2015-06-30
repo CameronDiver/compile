@@ -51,6 +51,13 @@ public:
 		}
 	}
 
+	std::vector<node *> getChildren() {
+		return children;
+	}
+
+	bool isList() {
+		return true;
+	}
 
 	std::string getStr() {
 		std::stringstream ss;
@@ -61,11 +68,7 @@ public:
 
 		return ss.str();
 	}
-
-	// Overshadow the vector already created in
-	// SyntaxTreeNode. 
-	// TODO: Find out if this means there are two
-	// vectors being kept.
+	
 	std::vector<node *> children;
 };
 
