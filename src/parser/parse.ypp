@@ -38,46 +38,30 @@
  
 
 Program:
-        Function                                            { root->addChild($1);}      
+        ExpressionList                                      { root->addChild($1);}      
         ;
 
 
-/********************************************************/
-/* Function Definitions                                 */
-/********************************************************/
-FunctionList:
-        FunctionList Function
-        | Function
+Statement:
+        Expression
         ;
 
-Function:
-        Type FunctionName '|' ArgumentList '|' StatementList END  { $$ = new FunctionDef($1, $2, $4, $6);}
+StatementList:
+        StatementList Delimiter Statement                   { $1->addChild($3);             }
+        | Statement                                         { $$ = new GenericList($1);     }
         ;
 
-ArgumentList:
-        ArgumentList ',' Argument                           { $$->addChild($3);             }     
-        | Argument                                          { $$ = new ArgumentList($1);    }
-        |                                                   { $$ = NULL;}
+
+Delimiter:
+        Delimiter RealDelimiter
+        | RealDelimiter
         ;
 
-/* An Argument in a function definition */
-Argument:
-        Type ArgumentName                                   { $$ = new Argument($1, $2);    }
+RealDelimiter:
+        ';'
+        | NEWLINE
         ;
 
-ArgumentName:
-        SYMBOL                                              { $$ = new Symbol(yytext);      }
-        ;
-
-FunctionName:
-        SYMBOL                                              { $$ = new Symbol(yytext);      }
-        ;
-
-/* TODO: Add in the inbuild language types */
-
-/*%token INTEGER_32 UINTEGER_32 INTEGER_8 UINTEGER_8
-%token INTEGER_16 UINTEGER_16 BOOLNAME FLOATNAME DOUBLENAME STRINGNAME
-%token CHARNAME INTEGER_64 UINTEGER_64 VOIDNAME*/
 Type:
         SYMBOL                                              { $$ = new Type(yytext);        }
         | INTEGER_32                                        { $$ = new Type(Type::INT32);   }
@@ -96,22 +80,18 @@ Type:
         | VOIDNAME                                          { $$ = new Type(Type::VOID);    }
         ;
 
-/********************************************************/
-/* Statements                                           */
-/********************************************************/
-StatementList:                                              
-        StatementList Delimiter Statement                   { if($3 != NULL) $$->addChild($3);  }
-        | Statement                                         { $$ = new GenericList($1);       }
+ArgumentList:                                               
+        ArgumentList ',' Argument                           { $1->addChild($3);            }
+        | Argument                                          { $$ = new ArgumentList($1);   }
+        | /* empty */                                       { $$ = new ArgumentList();     }
         ;
 
-Statement:
-        Expression
-        |                                                   { $$ = NULL;}
+Argument:
+        Type Identifier                                     { $$ = new Argument($1, $2);    }
         ;
 
-Delimiter:
-        NEWLINE
-        | ';'
+Identifier:
+        SYMBOL                                              { $$ = new Symbol(yytext);          }
         ;
 
 /********************************************************/
@@ -119,13 +99,15 @@ Delimiter:
 /********************************************************/
 
 
-ExpressionList:     
-        ExpressionList ',' Expression                       { $$->addChild($3);}
-        | Expression                                        { $$ = new GenericList($1);}
+ExpressionList:                                             
+        ExpressionList ',' Expression                       { $1->addChild($3);         }
+        | Expression                                        { $$=new GenericList($1);   }
         ;                                
 
 Expression:
-        AssignExpression
+        AssignExpression                                    
+        |
+        ;
 
 AssignExpression:
         AssignExpression PLUSEQ RelationExpression          { $$ = new BinaryOperation(OP_PLUSEQ, $1, $3); }
@@ -187,7 +169,12 @@ Value:
         | FLOAT                                             { $$ = new Float(yytext);                       }
         | SYMBOL                                            { $$ = new Symbol(yytext);                      }
         | STRING                                            { $$ = new String(yytext);                      }
+        | LambdaFunction
         | '(' Expression ')'                                { $$ = $2;                                      }
+        ;
+
+LambdaFunction:
+        '{' '|' ArgumentList '|' StatementList '}'             { $$ = new LambdaFunction($3, $5);}
         ;
 
 
