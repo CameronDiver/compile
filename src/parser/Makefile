@@ -11,7 +11,7 @@ LIBS=-ll
 LEX=flex
 YACC=bison
 
-YACCFLAGS=-d
+YACCFLAGS=-d -v
 
 LEXFILE=lex.l
 YACCFILE=parse.ypp
