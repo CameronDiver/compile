@@ -20,40 +20,14 @@ class FunctionDef : public SyntaxTreeNode {
  	  SyntaxTreeNode *_argList, SyntaxTreeNode *_statementList)
  	:	SyntaxTreeNode("Function Definition") {
 
+ 		type = TRY_CAST(_type, Type*);
+ 		name = TRY_CAST(_name, Symbol*);
 
- 		type = dynamic_cast<Type *>(_type);
- 		if(type == NULL) {
- 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
- 				<< "   Attempted cast to Type but actual class is " << _type->getStr() << std::endl;
- 		};
+ 		if(_argList)
+ 			argList = TRY_CAST(_argList, ArgumentList*);
 
- 		name = dynamic_cast<Symbol *>(_name);
- 		if(name == NULL){
- 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
- 				<< "   Attempted cast to Symbol but actual class is " << _name->getStr() << std::endl;
- 		}
+ 		statementList = TRY_CAST(_statementList, GenericList*);
 
-
- 		if(_argList != NULL) {
-	 		argList = dynamic_cast<ArgumentList *>(_argList);
-	 		if(argList == NULL){
-	 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
-	 				<< "   Attempted cast to Argument List but actual class is " << _argList->getStr() << std::endl;
-	 		}
-	 	} else {
-	 		argList = NULL;
-	 	}
-
- 		statementList = dynamic_cast<GenericList *>(_statementList);
- 		if(statementList == NULL) {
- 			std::cout << "Cast error " << __FILE__ << ":" << __LINE__ << std::endl
- 				<< "   Attempted cast to Statement List but actual class is " << _statementList->getStr() << std::endl;
- 		}
-
- 		children = statementList->children;
- 		std::cout << "Statement list size:" << statementList->children.size() << std::endl;
- 		//std::cout << "Statement list [0] = " << statementList->children[0]->getStr() << std::endl;
- 		//std::cout << "Statement list [1] = " << statementList->children[1]->getStr() << std::endl;
 
  	};
 
@@ -63,12 +37,20 @@ class FunctionDef : public SyntaxTreeNode {
  			<< name->getStr() << " | ";
 
  		if(argList != NULL) {
-	 		for(uint i = 0; i < argList->children.size(); ++i) {
-	 			Argument *a = dynamic_cast<Argument *>(argList->children[i]);
-	 			ss << a->type->getStr() << " " << a->name->getStr() << ", ";
+	 		for(auto arg: *argList) {
+	 			// TODO: Fix trailing comma
+	 			ss << " " << arg->getStr() << ",";
 	 		}
 	 	}
  		ss << " | ";
+
+ 		for(uint i = 0; i < statementList->size(); ++i) {
+ 			std::cout << statementList->children[i]->nodeName << std::endl;
+ 			ss << statementList->children[i]->getStr() << "\n";
+ 		}
+ 		//for(auto statement : *statementList) {
+ 			//ss << statement->getStr() << std::endl;
+ 		//}
 
  		return ss.str();
  	}

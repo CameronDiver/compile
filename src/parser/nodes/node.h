@@ -11,17 +11,17 @@
 class SyntaxTreeNode {
  public:
  	std::string nodeName;
- 	std::vector<SyntaxTreeNode *> children;
+ 	SyntaxTreeNode *child;
 
  	SyntaxTreeNode(std::string name)
  	:	nodeName(name){}
 
- 	void addChild(SyntaxTreeNode *child) {
- 		children.push_back(child);
+ 	virtual void addChild(SyntaxTreeNode *_child){
+ 		child = _child;
  	}
 
- 	std::vector<SyntaxTreeNode *> getChildren() {
- 		return children;
+ 	SyntaxTreeNode *getChild() {
+ 		return child;
  	}
 
 
@@ -36,18 +36,38 @@ class SyntaxTreeNode {
  	void printSubtree(int depth=0) {
  		for(int i = 0; i < depth; ++i) std::cout << "   ";
  		std::cout <<  getStr() << std::endl;
- 		for(uint j = 0; j < children.size(); ++j) {
- 			children[j]->printSubtree(depth+1);
- 		}
+ 		
+
+ 		if(child != NULL)
+ 			child->printSubtree(depth+1);
  	}
 
 
 };
 
+// Temporary definition
 class CastException {
 public:
-	CastException(std::string msg)
-	:	message(msg) {}
+	CastException(SyntaxTreeNode *obj, std::string destType
+#ifdef DEBUG
+		, std::string file, int line) 
+#else
+		)
+#endif
+{
+		std::stringstream ss;
+		ss << "Attempted to cast to type " << destType;
+		if(obj != NULL) 
+			ss << " but node is of type: " << obj->getStr();
+		else 
+			ss << " but node is NULL.";
+
+		#ifdef DEBUG
+			ss << " [" << file << ":" << line << "]";
+		#endif
+
+		message = ss.str();
+	}
 
 	std::string getMsg(){
 		return message;
@@ -58,7 +78,12 @@ private:
 };
 
 // Helper macros
-#define TRY_CAST(obj, resType) [&obj]()-> resType { resType ret = dynamic_cast<resType>(obj); \
-	if((obj) == NULL) throw new CastException("TODO"); return ret;}()
+#ifdef DEBUG
+	#define TRY_CAST(obj, resType) [&obj]()-> resType { resType ret = dynamic_cast<resType>(obj); \
+		if((obj) == NULL) throw new CastException(obj, #resType, __FILE__, __LINE__); return ret;}()
+#else
+	#define TRY_CAST(obj, resType) [&obj]()-> resType { resType ret = dynamic_cast<resType>(obj); \
+		if((obj) == NULL) throw new CastException(obj, #resType); return ret;}()
+#endif
 
 #endif

@@ -10,6 +10,7 @@
 #include "functiondef.h"
 #include "genericlist.h"
 #include "integer.h"
+#include "lambda.h"
 #include "list.h"
 #include "operators.h"
 #include "string.h"

@@ -9,18 +9,18 @@
 
 class BinaryOperation : public SyntaxTreeNode {
  public:
- 	/* TODO: custom type for operators */
  	Operator op;
- 	BinaryOperation(Operator _op, SyntaxTreeNode *LHS, SyntaxTreeNode *RHS)
- 	:	SyntaxTreeNode("Binary Operation"), op(_op) {
- 			addChild(LHS);
- 			addChild(RHS);
- 		}; 
+
+ 	SyntaxTreeNode *LHS;
+ 	SyntaxTreeNode *RHS;
+
+ 	BinaryOperation(Operator _op, SyntaxTreeNode *_LHS, SyntaxTreeNode *_RHS)
+ 	:	SyntaxTreeNode("Binary Operation"), op(_op), LHS(_LHS), RHS(_RHS) {	}
 
  	std::string getStr() {
  		std::stringstream ss;
- 		ss << "Binary Operation: " << opToStr(op);
- 		//ss << op;
+ 		ss << "Binary Operation: " << LHS->getStr() << opToStr(op) << RHS->getStr();
+ 		
  		return ss.str();
  	}
 

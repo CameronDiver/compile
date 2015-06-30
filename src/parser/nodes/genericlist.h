@@ -7,6 +7,9 @@ class GenericList : public NodeList<SyntaxTreeNode> {
 public:
 	GenericList(SyntaxTreeNode *child)
 	:	NodeList("List", child) {}
+
+	GenericList()
+	:	NodeList("List") {}
 };
 
 #endif // PARSE_GENERIC_LIST_H

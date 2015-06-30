@@ -39,7 +39,7 @@ public:
 
 	// Accept a SyntaxTreeNode* and attempt to dynamic_cast it to
 	// whatever node is
-	node *addChild(SyntaxTreeNode *child) {
+	void addChild(SyntaxTreeNode *child) {
 		if(child != NULL){
 			node *elem = dynamic_cast<node *>(child);
 			if(elem == NULL) {
@@ -48,11 +48,19 @@ public:
 				std::cout << "Cast error: Attempted cast to " << typeid(node).name() << " but actual type was :" << child->getStr() << std::endl;
 			}
 			children.push_back(elem);
-			return elem;
 		}
-		return child;
 	}
 
+
+	std::string getStr() {
+		std::stringstream ss;
+		ss << this->nodeName << std::endl;
+		for(auto elem : children) {
+			ss << elem->getStr() << " ";
+		}
+
+		return ss.str();
+	}
 
 	// Overshadow the vector already created in
 	// SyntaxTreeNode. 

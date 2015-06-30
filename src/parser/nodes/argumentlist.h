@@ -7,6 +7,9 @@
 class ArgumentList : public NodeList<Argument> {
  public:
  	ArgumentList(SyntaxTreeNode *arg)
+ 	:	NodeList("Argument List", arg) {}
+
+ 	ArgumentList()
  	:	NodeList("Argument List") {}
 };
 
