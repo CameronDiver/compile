@@ -79,7 +79,11 @@ int main(int argc, char *argv[]) {
 	root = new SyntaxTreeNode("Root");
 	currentNode = root;
 
-	yyparse();
+	try {
+		yyparse();
+	} catch(CastException *c) {
+		std::cout << "Received a cast exception: " << c->getMsg() << std::endl;
+	}
 
 	root->printSubtree();
 
