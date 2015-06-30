@@ -20,7 +20,7 @@ class SyntaxTreeNode {
  		child = _child;
  	}
 
- 	SyntaxTreeNode *getChild() {
+ 	virtual SyntaxTreeNode *getChild() {
  		return child;
  	}
 
@@ -33,13 +33,20 @@ class SyntaxTreeNode {
  		return nodeName;
  	}
 
- 	void printSubtree(int depth=0) {
+
+	virtual bool isList() {
+		return false;
+	}
+
+ 	virtual void printSubtree(unsigned depth=0) {
  		for(int i = 0; i < depth; ++i) std::cout << "   ";
  		std::cout <<  getStr() << std::endl;
  		
+		
+		if(child != NULL)
+			child->printSubtree(depth+1);
 
- 		if(child != NULL)
- 			child->printSubtree(depth+1);
+
  	}
 
 
