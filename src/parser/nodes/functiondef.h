@@ -42,7 +42,7 @@ class FunctionDef : public SyntaxTreeNode {
 	 			ss << " " << arg->getStr() << ",";
 	 		}
 	 	}
- 		ss << " | ";
+ 		ss << " | " << std::endl;
  		
  		for(auto statement : *statementList) {
  			ss << statement->getStr() << std::endl;
