@@ -17,5 +17,6 @@
 #include "symbol.h"
 #include "type.h"
 #include "unaryoperation.h"
+#include "vardec.h"
 
 #endif // PARSE_NODES_H

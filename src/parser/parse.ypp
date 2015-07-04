@@ -38,10 +38,8 @@
  
 
 Program:
-        Function                                       { root->addChild($1);}      
+        Function                                            { root->addChild($1);}      
         ;
-
-
 
 
 Function:
@@ -49,10 +47,19 @@ Function:
                                                             { $$ = new FunctionDef($1, $2, $4, $6); }
 
 
+///////////////////////////////////////////////////////////////////////////////
+// Statements and control flow ////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
 Statement:
         Expression Delimiter
+        | VariableDeclaration Delimiter
         | Delimiter
         ;
+
+VariableDeclaration:
+        Type Identifier                                     { $$ = new VariableDeclaration($1, $2);}
+        | Type Identifier EQUALS Expression                 { $$ = new VariableDeclaration($1, $2, $4);}
 
 StatementList:
         StatementList Statement                             { $1->addChild($2);             }
