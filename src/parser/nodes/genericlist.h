@@ -25,7 +25,9 @@ public:
 	}
 
 	void addChild(SyntaxTreeNode *child) {
-		children.push_back(child);
+		if(child != NULL) {
+			children.push_back(child);
+		}
 	}
 
 	std::vector<SyntaxTreeNode *> getChildren() const {
@@ -61,7 +63,8 @@ public:
 	void printSubtree(unsigned depth=0) {
 		for(auto c : children) {
 			for(uint i = 0; i < depth; ++i) std::cout << "   ";
-			std::cout << c->getStr() << "\n";
+			if(c)
+				std::cout << c->getStr() << "\n";
 		}
 	}
 

@@ -29,7 +29,8 @@ public:
 		ss << " |";
 		
 		for(auto statement : *statements) {
-			ss << statement->getStr() << ";";
+			if(statement)
+				ss << statement->getStr() << ";";
 		}
 
 
