@@ -27,7 +27,7 @@
 %token COMP LTE GTE NOTEQ LT GT
 %token PLUS MINUS MULT DIV MOD
 
-%token NEWLINE 
+%token NEWLINE LBRACE RBRACE
 
 %left MULT DIV
 %left PLUS MINUS
@@ -38,26 +38,29 @@
  
 
 Program:
-        ExpressionList                                      { root->addChild($1);}      
+        Function                                       { root->addChild($1);}      
         ;
+
+
+
+
+Function:
+        Type Identifier '|' ArgumentList '|' StatementList END
+                                                            { $$ = new FunctionDef($1, $2, $4, $6); }
 
 
 Statement:
-        Expression
+        Expression Delimiter
+        | Delimiter
         ;
 
 StatementList:
-        StatementList Delimiter Statement                   { $1->addChild($3);             }
+        StatementList Statement                             { $1->addChild($2);             }
         | Statement                                         { $$ = new GenericList($1);     }
         ;
 
 
 Delimiter:
-        Delimiter RealDelimiter
-        | RealDelimiter
-        ;
-
-RealDelimiter:
         ';'
         | NEWLINE
         ;
@@ -106,7 +109,6 @@ ExpressionList:
 
 Expression:
         AssignExpression                                    
-        |
         ;
 
 AssignExpression:
@@ -171,10 +173,11 @@ Value:
         | STRING                                            { $$ = new String(yytext);                      }
         | LambdaFunction
         | '(' Expression ')'                                { $$ = $2;                                      }
+        | '[' ExpressionList ']'                            { $$ = $2;}
         ;
 
 LambdaFunction:
-        '{' '|' ArgumentList '|' StatementList '}'             { $$ = new LambdaFunction($3, $5);}
+        LBRACE '|' ArgumentList '|' StatementList RBRACE    { $$ = new LambdaFunction($3, $5);}
         ;
 
 

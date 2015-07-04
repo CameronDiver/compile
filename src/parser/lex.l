@@ -95,6 +95,8 @@ whitespace					[ \t\r]+
 
 "||"						{return OR;}
 
+"{"							{return LBRACE;}
+"}"							{return RBRACE;}
 
 {symbol}					{return SYMBOL;}
 "\n"						{return NEWLINE;}
