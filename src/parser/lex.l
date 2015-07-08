@@ -58,6 +58,7 @@ whitespace					[ \t\r]+
 
 "if"						{return IF;}
 "while"						{return WHILE;}
+"else"						{return ELSE;}
 "end"						{return END;}
 
 "+"							{return PLUS;}
