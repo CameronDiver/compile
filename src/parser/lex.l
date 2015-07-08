@@ -1,7 +1,7 @@
 %{
 	#include <stdio.h>
 
-	class SyntaxTreeNode;
+	#include "nodes/nodes.h"
 
 	#ifndef YYSTYPE
          #define YYSTYPE SyntaxTreeNode*
@@ -31,12 +31,12 @@ whitespace					[ \t\r]+
 %%
 
 
-{bindigit}+"b"				{return BININT;}
-"0x"{hexdigit}+				{return HEXINT;}
-{digit}+					{return DECINT;}
-{digit}*"."{digit}+			{return FLOAT;}
+{bindigit}+"b"				{yylval = new Integer(yytext, 2); return BININT;}
+"0x"{hexdigit}+				{yylval = new Integer(yytext, 16); return HEXINT;}
+{digit}+					{yylval = new Integer(yytext); return DECINT;}
+{digit}*"."{digit}+			{yylval = new Float(yytext); return FLOAT;}
 
-{string}					{return STRING;}
+{string}					{yylval = new String(yytext); return STRING;}
 
 "int"						{return INTEGER_32;}
 "uint"						{return UINTEGER_32;}
@@ -101,7 +101,7 @@ whitespace					[ \t\r]+
 "{"							{return LBRACE;}
 "}"							{return RBRACE;}
 
-{symbol}					{return SYMBOL;}
+{symbol}					{yylval = new Symbol(yytext); return SYMBOL;}
 "\n"						{return NEWLINE;}
 {whitespace}				{/* Do Nothing */}
 
