@@ -56,6 +56,8 @@ whitespace					[ \t\r]+
 "void"						{return VOIDNAME;}
 
 
+"if"						{return IF;}
+"while"						{return WHILE;}
 "end"						{return END;}
 
 "+"							{return PLUS;}
