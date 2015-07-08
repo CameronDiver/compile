@@ -11,10 +11,12 @@
     int yyerror(const char *);
 
     extern char *yytext;
+    extern YYSTYPE yylval;
 %}
 
 
 %define parse.error verbose
+
 
 %token BININT HEXINT DECINT FLOAT SYMBOL STRING END
 %token INTEGER_32 UINTEGER_32 INTEGER_8 UINTEGER_8
@@ -26,13 +28,14 @@
 %token BITWISENOT NOT SHR SHL
 %token COMP LTE GTE NOTEQ LT GT
 %token PLUS MINUS MULT DIV MOD
-
 %token NEWLINE LBRACE RBRACE
+%token IF WHILE ELSE
 
 %left MULT DIV
 %left PLUS MINUS
 %left COMP LTE GTE LT GT NOTEQ
 %right PLUSEQ MINUSEQ MULTEQ DIVEQ EQUALS
+%left '('
 
 %%
  
@@ -47,19 +50,30 @@ Function:
                                                             { $$ = new FunctionDef($1, $2, $4, $6); }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Statements and control flow ////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+/******************************************/
+/* Statements and control flow ************/
+/******************************************/
 
 Statement:
         Expression Delimiter
         | VariableDeclaration Delimiter
+        | ControlFlowStatement Delimiter
         | Delimiter
+        ;
+
+ControlFlowStatement:
+        IfStatement
+        ;
+
+IfStatement:
+        IF Statement StatementList END                       { $$ = new IfStatement($2, $3); }
+        | IF Statement StatementList ELSE StatementList END  { $$ = new IfStatement($2, $3, $5);}
         ;
 
 VariableDeclaration:
         Type Identifier                                     { $$ = new VariableDeclaration($1, $2);}
         | Type Identifier EQUALS Expression                 { $$ = new VariableDeclaration($1, $2, $4);}
+        ;
 
 StatementList:
         StatementList Statement                             { $1->addChild($2);             }
