@@ -31,7 +31,7 @@ OUT=parse
 
 all: build
 
-build: $(LEXOUTFILES) $(YACCOUTFILES) realbuild
+build: $(YACCOUTFILES) $(LEXOUTFILES) realbuild
 
 realbuild: $(OBJS)
 	$(CPP) $(CPPFLAGS) $(OBJS) -o $(OUT) $(LIBS)
