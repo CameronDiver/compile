@@ -56,12 +56,22 @@ public:
 		return children.end();
 	}
 
+	const std::vector<SyntaxTreeNode *>::const_iterator begin() const {
+		return children.begin();
+	}
+
+	const std::vector<SyntaxTreeNode *>::const_iterator end() const {
+		return children.end();
+	}
+
 	bool isList() {
 		return true;
 	}
  
 	void printSubtree(unsigned depth=0) {
-		for(auto c : children) {
+		//for(auto c : children) {
+		for(uint j = 0; j < children.size(); ++j) {
+			auto c = children[j];
 			for(uint i = 0; i < depth; ++i) std::cout << "   ";
 			if(c)
 				std::cout << c->getStr() << "\n";
