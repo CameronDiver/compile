@@ -20,5 +20,6 @@
 #include "vardec.h"
 #include "ifstatement.h"
 #include "whilestatement.h"
+#include "functionlist.h"
 
 #endif // PARSE_NODES_H
