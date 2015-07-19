@@ -58,7 +58,7 @@ Statement:
         Expression Delimiter
         | VariableDeclaration Delimiter
         | ControlFlowStatement Delimiter
-        | Delimiter
+        | Delimiter                                         { $$ = NULL;                        }
         ;
 
 ControlFlowStatement:
