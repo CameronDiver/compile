@@ -19,5 +19,6 @@
 #include "unaryoperation.h"
 #include "vardec.h"
 #include "ifstatement.h"
+#include "whilestatement.h"
 
 #endif // PARSE_NODES_H

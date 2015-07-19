@@ -63,6 +63,11 @@ Statement:
 
 ControlFlowStatement:
         IfStatement
+        | WhileStatement
+        ;
+
+WhileStatement:
+        WHILE Statement StatementList END                   { $$ = new WhileStatement($2, $3);  }
         ;
 
 IfStatement:
