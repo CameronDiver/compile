@@ -8,7 +8,7 @@
     #endif
 
 	#include "parse.tab.hpp"
-	void yyerror(char *);
+	void yyerror(const char *);
 
 	// extern YYSTYPE yylval;
 %}
