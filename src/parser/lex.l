@@ -21,7 +21,7 @@ alpha						[[:alpha:]]
 bindigit					[10]
 hexdigit					[[:digit:]a-fA-F]
 
-symbol						[a-zA-Z_]+[[:alnum:]]*
+symbol						[a-zA-Z_]+[[:alnum:]_]*
 
 /* Taken from https://www.lysator.liu.se/c/ANSI-C-grammar-l.html */
 string						\"(\\.|[^\\"])*\"
