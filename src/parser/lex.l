@@ -15,18 +15,18 @@
 
 %option yylineno
 
-digit						[[:digit:]]
-alpha						[[:alpha:]]
+digit						[0-9]
+alpha						[a-zA-Z]
 
 bindigit					[10]
-hexdigit					[[:digit:]a-fA-F]
+hexdigit					[0-9a-fA-F]
 
-symbol						[a-zA-Z_]+[[:alnum:]_]*
+symbol						[a-zA-Z_]+(alpha|digit|_)*
 
 /* Taken from https://www.lysator.liu.se/c/ANSI-C-grammar-l.html */
 string						\"(\\.|[^\\"])*\"
 
-whitespace					[[:space:]\t\r]+
+whitespace					[ \t\r]+
 
 %%
 
