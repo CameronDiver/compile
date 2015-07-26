@@ -2,6 +2,8 @@
 #include <cstdio>
 #include "parse.h"
 
+
+SyntaxTreeNode *root;
 std::string opToStr(Operator op) {
 	switch(op){
 		case OP_PLUS:
@@ -60,24 +62,16 @@ std::string unaryOpToStr(UnaryOperator op) {
 	}
 }
 
-// current is the current node that is being added to
-SyntaxTreeNode *root, *currentNode;
-
-void setCurrentNode(SyntaxTreeNode *node) {
-	currentNode = node;
-}
-
 
 int main(int argc, char *argv[]) {
 	if(argc >= 2){
 		yyin = fopen(argv[1], "r");
 	}
-	
+
 
 
 	// Setup a root node for the tree to begin building from
 	root = new SyntaxTreeNode("Root");
-	currentNode = root;
 
 	try {
 		yyparse();

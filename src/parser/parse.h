@@ -17,7 +17,6 @@ int yyparse();
 extern FILE *yyin;
 
 extern SyntaxTreeNode *root;
-extern SyntaxTreeNode *currentNode;
 
 void setCurrentNode(SyntaxTreeNode *node);
 
