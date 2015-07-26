@@ -29,7 +29,12 @@ OBJS= parse.o $(YACCOBJ) $(LEXOBJ)
 
 OUT=parse
 
+.PHONY: test
+
 all: build
+
+test:
+	test/runtests.rb ./parse test
 
 build: $(YACCOUTFILES) $(LEXOUTFILES) realbuild
 
