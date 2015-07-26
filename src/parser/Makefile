@@ -25,7 +25,7 @@ LEXOBJ=lex.yy.o
 
 GLOBALS=parse.h $(wildcard $(NODEDIR)/*.h)
 
-OBJS= parse.o $(YACCOBJ) $(LEXOBJ)
+OBJS= parse.o pathman.o $(YACCOBJ) $(LEXOBJ)
 
 OUT=parse
 
@@ -58,4 +58,3 @@ $(LEXOBJ): $(LEXOUTFILES)
 
 clean:
 	rm $(OBJS) $(LEXOUTFILES) $(YACCOUTFILES)
-

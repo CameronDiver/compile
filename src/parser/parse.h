@@ -10,6 +10,7 @@
 #include <sstream>
 
 #include "nodes/nodes.h"
+#include "pathman.h"
 
 
 int yyparse();
