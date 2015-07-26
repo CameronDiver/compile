@@ -38,23 +38,16 @@
 %left '('
 
 %%
-
+ 
 
 Program:
-        FunctionList                                        { root->addChild($1);}
+        Function                                            { root->addChild($1);}      
         ;
 
-
-
-FunctionList:
-        FunctionList Function                       { $1->addChild($2);                     }
-        | Function                                  { $$ = new FunctionList($1);            }
-        ;
 
 Function:
         Type Identifier '|' ArgumentList '|' StatementList END
                                                             { $$ = new FunctionDef($1, $2, $4, $6); }
-        | Delimiter                                         { $$ = NULL;                            }
 
 
 /******************************************/
