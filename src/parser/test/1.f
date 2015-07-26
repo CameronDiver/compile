@@ -1,4 +1,3 @@
-import test/list.f
 
 
 int a | int b, int c |

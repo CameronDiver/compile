@@ -1,12 +1,16 @@
+#!/usr/bin/env ruby
+
 require 'term/ansicolor'
 include Term::ANSIColor
 
 $results = []
 
-if ARGV.length < 1
+if ARGV.length < 2
+	puts "No executable or start dir provided"
 	exit 1
 end
 $exe = ARGV[0]
+startDir = ARGV[1]
 
 def runDir dir
 	entries = Dir[dir+"/*"]
@@ -28,7 +32,7 @@ def runDir dir
 
 end
 
-runDir "."
+runDir startDir
 
 passed = true
 
