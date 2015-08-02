@@ -2,6 +2,7 @@
 	#include <stdio.h>
 
 	#include "nodes/nodes.h"
+	#include "pathman.h"
 
 	#ifndef YYSTYPE
          #define YYSTYPE SyntaxTreeNode*
@@ -10,10 +11,11 @@
 	#include "parse.tab.hpp"
 	void yyerror(const char *);
 
-	// extern YYSTYPE yylval;
+	extern PathManager pathManager;
 %}
 
 %option yylineno
+%x IncludeState
 
 digit						[0-9]
 alpha						[a-zA-Z]
@@ -30,6 +32,28 @@ whitespace					[ \t\r]+
 
 %%
 
+
+<<EOF>> {
+	yypop_buffer_state();
+
+	if(!YY_CURRENT_BUFFER)
+		yyterminate();
+}
+
+<IncludeState>[^ \n\r\t]+ {
+	yyin = pathManager.openImport(yytext);
+	if(!yyin) {
+		// TODO: Throw exception
+		std::cout << "Couldn't open file" << std::endl;
+	}
+	yypush_buffer_state(yy_create_buffer(yyin, YY_BUF_SIZE));
+
+	BEGIN(INITIAL);
+}
+
+<IncludeState>{whitespace}+ {
+	/* nothing */
+}
 
 {bindigit}+"b"				{yylval = new Integer(yytext, 2); return BININT;}
 "0x"{hexdigit}+				{yylval = new Integer(yytext, 16); return HEXINT;}
@@ -55,6 +79,7 @@ whitespace					[ \t\r]+
 "char"						{return CHARNAME;}
 "void"						{return VOIDNAME;}
 
+"import"					{BEGIN(IncludeState);}
 
 "if"						{return IF;}
 "while"						{return WHILE;}
@@ -106,8 +131,6 @@ whitespace					[ \t\r]+
 {whitespace}				{/* Do Nothing */}
 
 .							{return *yytext;}
-
-
 
 
 

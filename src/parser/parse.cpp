@@ -4,6 +4,8 @@
 
 
 SyntaxTreeNode *root;
+PathManager pathManager;
+
 std::string opToStr(Operator op) {
 	switch(op){
 		case OP_PLUS:
@@ -64,8 +66,12 @@ std::string unaryOpToStr(UnaryOperator op) {
 
 
 int main(int argc, char *argv[]) {
+
+	pathManager.addPath("./");
+
 	if(argc >= 2){
-		yyin = fopen(argv[1], "r");
+		yyin = pathManager.openImport(argv[1]);
+		//fopen(argv[1], "r");
 	}
 
 
