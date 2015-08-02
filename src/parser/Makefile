@@ -6,7 +6,7 @@ NODEDIR=nodes
 CFLAGS=-Wall -DDEBUG -g
 CPPFLAGS=-Wall -std=c++11 -Wno-write-strings -Wno-deprecated-register -g -DDEBUG
 
-LIBS=-ll
+LIBS=
 
 LEX=flex
 YACC=bison
@@ -36,10 +36,14 @@ all: build
 test:
 	test/runtests.rb ./parse test
 
+unittest: CPPFLAGS+= -DUNITTEST -Iinc/
+unittest: LIBS+= -L./lib -lgtest -pthreads
+unittest: build
+
 build: $(YACCOUTFILES) $(LEXOUTFILES) realbuild
 
 realbuild: $(OBJS)
-	$(CPP) $(CPPFLAGS) $(OBJS) -o $(OUT) $(LIBS)
+	$(CPP)  $(OBJS) -o $(OUT) $(LIBS)
 
 $(LEXOUTFILES): $(LEXFILE) $(GLOBALS)
 	$(LEX) $(LEXFILE)
